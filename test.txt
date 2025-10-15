@@ -1,0 +1,184 @@
+import { useEffect, useState } from "react";
+import api from "../lib/api";
+
+export default function CommentSection({ ticketId }) {
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState("");
+  const [editingComment, setEditingComment] = useState(null);
+  const [newReply, setNewReply] = useState({});
+  const [editingReply, setEditingReply] = useState({});
+
+  const fetchComments = async () => {
+    try {
+      const res = await api.get(`/getcommbyticket/${ticketId}`);
+      const commentsData = res.data.comments || [];
+      // Fetch replies for each comment
+      const commentsWithReplies = await Promise.all(
+        commentsData.map(async (comment) => {
+          const repliesRes = await api.get(
+            `/getrepliesbycomment/${comment.id}`
+          );
+          return { ...comment, replies: repliesRes.data.replies || [] };
+        })
+      );
+      setComments(commentsWithReplies);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchComments();
+  }, [ticketId]);
+
+  const handleAddComment = async () => {
+    try {
+      if (editingComment) {
+        await api.put(`/editcomment/${editingComment.id}`, {
+          comment_text: newComment,
+        });
+        setEditingComment(null);
+      } else {
+        await api.post("/addcomment", {
+          ticket_id: ticketId,
+          comment_text: newComment,
+        });
+      }
+      setNewComment("");
+      fetchComments();
+    } catch (error) {
+      console.error("Error saving comment:", error);
+    }
+  };
+
+  const handleDeleteComment = async (id) => {
+    if (confirm("Are you sure?")) {
+      try {
+        await api.delete(`/deletecomment/${id}`);
+        fetchComments();
+      } catch (error) {
+        console.error("Error deleting comment:", error);
+      }
+    }
+  };
+
+  const handleEditComment = (comment) => {
+    setNewComment(comment.comment_text);
+    setEditingComment(comment);
+  };
+
+  const handleAddReply = async (commentId) => {
+    try {
+      if (editingReply[commentId]) {
+        await api.put(`/editreply/${editingReply[commentId].id}`, {
+          reply_text: newReply[commentId],
+        });
+        setEditingReply({ ...editingReply, [commentId]: null });
+      } else {
+        await api.post(`/replycomment/${commentId}`, {
+          reply_text: newReply[commentId],
+        });
+      }
+      setNewReply({ ...newReply, [commentId]: "" });
+      fetchComments();
+    } catch (error) {
+      console.error("Error saving reply:", error);
+    }
+  };
+
+  const handleDeleteReply = async (replyId, commentId) => {
+    if (confirm("Are you sure?")) {
+      try {
+        await api.delete(`/deletereply/${replyId}`);
+        fetchComments();
+      } catch (error) {
+        console.error("Error deleting reply:", error);
+      }
+    }
+  };
+
+  const handleEditReply = (reply, commentId) => {
+    setNewReply({ ...newReply, [commentId]: reply.reply_text });
+    setEditingReply({ ...editingReply, [commentId]: reply });
+  };
+
+  return (
+    <div>
+      <h3 className="text-xl font-semibold mb-2">Comments</h3>
+      <textarea
+        value={newComment}
+        onChange={(e) => setNewComment(e.target.value)}
+        className="w-full p-2 border rounded mb-2"
+        placeholder="Add a comment..."
+      />
+      <button
+        onClick={handleAddComment}
+        className="bg-blue-600 text-white p-2 rounded mb-4"
+      >
+        {editingComment ? "Update" : "Add"} Comment
+      </button>
+      {comments.map((comment) => (
+        <div key={comment.id} className="bg-gray-100 p-4 rounded mb-4">
+          <p className="mb-2">
+            {comment.comment_text} -{" "}
+            <strong>
+              {comment.user_name} ({comment.role})
+            </strong>{" "}
+            at {new Date(comment.created_at).toLocaleString()}
+          </p>
+          <button
+            onClick={() => handleEditComment(comment)}
+            className="text-blue-600 hover:underline mr-2"
+          >
+            Edit
+          </button>
+          <button
+            onClick={() => handleDeleteComment(comment.id)}
+            className="text-red-600 hover:underline"
+          >
+            Delete
+          </button>
+          <div className="ml-4 mt-2">
+            {comment.replies.map((reply) => (
+              <div key={reply.id} className="bg-white p-2 rounded mb-2">
+                <p>
+                  {reply.reply_text} -{" "}
+                  <strong>
+                    {reply.user_name} ({reply.role})
+                  </strong>{" "}
+                  at {new Date(reply.created_at).toLocaleString()}
+                </p>
+                <button
+                  onClick={() => handleEditReply(reply, comment.id)}
+                  className="text-blue-600 hover:underline mr-2"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDeleteReply(reply.id, comment.id)}
+                  className="text-red-600 hover:underline"
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
+            <textarea
+              value={newReply[comment.id] || ""}
+              onChange={(e) =>
+                setNewReply({ ...newReply, [comment.id]: e.target.value })
+              }
+              className="w-full p-2 border rounded mb-2"
+              placeholder="Add a reply..."
+            />
+            <button
+              onClick={() => handleAddReply(comment.id)}
+              className="bg-green-600 text-white p-2 rounded"
+            >
+              {editingReply[comment.id] ? "Update" : "Add"} Reply
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
