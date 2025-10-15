@@ -27,7 +27,7 @@ export default function TicketDetail() {
 
   return (
     <div className="p-4 ml-64">
-      <h2 className="text-3xl font-bold text-gray-500 mb-4">Ticket Details</h2>
+      <h2 className="text-3xl font-bold text-gray-500 mb-4">TICKET DETAILS</h2>
       <div className="bg-white text-gray-800 p-4 rounded shadow mb-4">
         <p className="mb-2">
           <strong>Title:</strong> {ticket.title}

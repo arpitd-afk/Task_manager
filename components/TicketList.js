@@ -12,14 +12,14 @@ export default function TicketList() {
         const response = await api.get("/getalltickets");
         setTickets(response.data.tickets || []);
       } catch (error) {
-        console.error("Error fetching tickets:", error);
+        console.error("Error Fetching Tickets:", error);
       }
     };
     fetchTickets();
   }, []);
 
   const handleDelete = async (id) => {
-    if (confirm("Are you sure?")) {
+    if (confirm("Are you Sure?")) {
       try {
         await api.delete(`/deleteticket/${id}`);
         setTickets(tickets.filter((ticket) => ticket.id !== id));
@@ -32,7 +32,7 @@ export default function TicketList() {
   return (
     <div className="p-2 ml-64">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-3xl font-bold mb-4 text-gray-500">Tickets</h2>
+        <h2 className="text-3xl font-bold mb-4 text-gray-500">TICKETS</h2>
         <Link
           href="/tickets/create"
           className="bg-green-600 text-white p-2 rounded mb-4 inline-block"

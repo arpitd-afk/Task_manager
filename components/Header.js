@@ -25,7 +25,7 @@ export default function Header() {
       <div className="container mx-auto flex justify-between items-center">
         {user && (
           <span className="text-lg font-semibold mr-8">
-            Welcome, {user.name || "User"}...
+            WELCOME, {user.name || "User"}...
           </span>
         )}{" "}
         <nav className="flex space-x-4 items-center">

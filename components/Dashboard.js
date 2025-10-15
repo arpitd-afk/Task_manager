@@ -56,7 +56,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg">
           <h3 className="text-2xl font-semibold text-gray-700 mb-4">
-            Ticket Summary
+            TICKET SUMMARY
           </h3>
           <ul className="space-y-2">
             {summary.map((item, index) => (
@@ -73,7 +73,7 @@ export default function Dashboard() {
         {/* ticket by priority */}
         <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg">
           <h3 className="text-2xl font-semibold text-gray-700 mb-4">
-            Ticket Priority
+            TICKET PRIORITY
           </h3>
           <ul className="space-y-2">
             {priorities.map((item, index) => (
@@ -90,7 +90,7 @@ export default function Dashboard() {
         {/* ticket by status */}
         <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg">
           <h3 className="text-2xl font-semibold text-gray-700 mb-4">
-            Task Status
+            TASK STATUS
           </h3>
           <ul className="space-y-2">
             {taskStatuses.map((item, index) => (
@@ -107,7 +107,7 @@ export default function Dashboard() {
       </div>
       {/* Line Chart */}
       <h2 className="text-2xl font-extrabold text-gray-500 mt-12 ml-2">
-        Line Chart - Ticket Summary
+        LINE CHART - TICKET SUMMARY
       </h2>
       <LineChart
         className="mt-4"
@@ -125,7 +125,7 @@ export default function Dashboard() {
       </LineChart>
       {/* Bar Chart */}
       <h2 className="text-2xl font-extrabold text-gray-500 mt-12 ml-2">
-        Bar Chart - Ticket Priority
+        BAR CHART - TICKET PRIORITY
       </h2>
       <BarChart
         className="mt-4"

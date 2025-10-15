@@ -46,7 +46,7 @@ export default function TaskList({ ticketId }) {
   return (
     <div className="mb-8">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-3xl text-gray-500 font-semibold mb-2">Tasks</h3>
+        <h3 className="text-3xl text-gray-500 font-semibold mb-2">TASKS</h3>
         <button
           onClick={() => {
             setShowForm(!showForm);

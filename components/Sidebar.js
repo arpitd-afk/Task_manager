@@ -7,41 +7,41 @@ export default function Sidebar() {
   return (
     <aside className="w-64 bg-white h-screen p-4 shadow-lg fixed border-r border-gray-200">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-600">Task Manager</h1>
+        <h1 className="text-2xl font-bold text-gray-600">TASK MANAGER</h1>
       </div>
       <nav className="space-y-4">
         <Link
           href="/dashboard"
           className="block p-3 text-gray-700 bg-gray-100 hover:text-white hover:bg-gray-400 rounded-lg transition"
         >
-          Dashboard
+          DASHBOARD
         </Link>
         <Link
           href="/tickets"
           className="block p-3 text-gray-700 bg-gray-100 hover:text-white hover:bg-gray-400 rounded-lg transition"
         >
-          Tickets
+          TICKETS
         </Link>
         <Link
           href="/tasks"
           className="block p-3 text-gray-700 bg-gray-100 hover:text-white hover:bg-gray-400 rounded-lg transition"
         >
-          Tasks
+          TASKS
         </Link>
         {/* <Link
           href="/notifications"
           className="block p-3 text-gray-700 bg-gray-100 hover:text-white hover:bg-gray-400 rounded-lg transition"
         >
-          Notifications
+          NOTIFICATIONS
         </Link> */}
-        {/* {(role === "Admin" || role === "Agent") && (
+        {(role === "Admin" || role === "Agent") && (
           <Link
             href="/users"
             className="block p-3 text-gray-700 bg-gray-100 hover:text-white hover:bg-gray-400 rounded-lg transition"
           >
-            Users
+            USERS
           </Link>
-        )} */}
+        )}
       </nav>
     </aside>
   );
