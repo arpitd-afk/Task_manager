@@ -8,6 +8,7 @@ export default function TaskForm({ ticketId, task, onSuccess }) {
     assigned_to: "",
     status: "Pending",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (task) {
@@ -26,6 +27,8 @@ export default function TaskForm({ ticketId, task, onSuccess }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+
     try {
       const payload = { ...formData, ticket_id: ticketId };
       if (task) {
@@ -35,65 +38,70 @@ export default function TaskForm({ ticketId, task, onSuccess }) {
       }
       onSuccess();
     } catch (error) {
-      console.error("Error saving task:", error);
+      console.error("Error Saving Task:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 bg-gray-100 rounded mb-4">
-      <div className="mb-4">
-        <label className="block text-sm font-medium">Title</label>
-        <input
-          type="text"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium">Description</label>
-        <textarea
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium">
-          Assigned To (User ID)
-        </label>
-        <input
-          type="number"
-          name="assigned_to"
-          value={formData.assigned_to}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium">Status</label>
-        <select
-          name="status"
-          value={formData.status}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
+    <div className="bg-gray-100  py-20 w-120 rounded mb-4">
+      <form onSubmit={handleSubmit} className="p-4 ">
+        <div className="mb-4">
+          <label className="block text-md font-medium">Title</label>
+          <input
+            type="text"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            className="w-full bg-white p-2 border rounded"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-md font-medium">Description</label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            className="w-full bg-white p-2 border rounded"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-md font-medium">
+            Assigned To (User ID)
+          </label>
+          <input
+            type="number"
+            name="assigned_to"
+            value={formData.assigned_to}
+            onChange={handleChange}
+            className="w-full bg-white p-2 border rounded"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-md font-medium">Status</label>
+          <select
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+            className="w-full bg-white p-2 border rounded"
+          >
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+        <button
+          type="submit"
+          className="bg-blue-600 w-30 text-white p-2 rounded hover:bg-blue-700"
+          disabled={isLoading}
         >
-          <option value="Pending">Pending</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Completed">Completed</option>
-        </select>
-      </div>
-      <button
-        type="submit"
-        className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
-      >
-        Save Task
-      </button>
-    </form>
+          {isLoading ? "Saving..." : "Save Task"}
+        </button>
+      </form>
+    </div>
   );
 }

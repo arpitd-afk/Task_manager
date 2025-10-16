@@ -8,8 +8,10 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     const publicPaths = ["/auth/login", "/auth/signup"];
-    if (!isAuthenticated() && !publicPaths.includes(router.pathname)) {
-      router.push("/login");
+    if (isAuthenticated() && publicPaths.includes(router.pathname)) {
+      router.push("/dashboard");
+    } else if (!isAuthenticated() && !publicPaths.includes(router.pathname)) {
+      router.push("/auth/login");
     }
   }, [router.pathname]);
 

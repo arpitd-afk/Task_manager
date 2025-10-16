@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import api from "../lib/api";
 import TaskForm from "./TaskForm";
 import Pagination from "./Pagination";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function TaskList({ ticketId }) {
+  const router = useRouter();
   const [tasks, setTasks] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
@@ -13,21 +16,20 @@ export default function TaskList({ ticketId }) {
       const res = await api.get(`/taskbyticket/${ticketId}`);
       setTasks(res.data.tasks || []);
     } catch (error) {
-      console.error("Error fetching tasks:", error);
+      console.error("Error Fetching Tasks:", error);
     }
   };
-
   useEffect(() => {
     fetchTasks();
   }, [ticketId]);
 
   const handleDelete = async (taskId) => {
-    if (confirm("Are you sure?")) {
+    if (confirm("Are You Sure?")) {
       try {
         await api.delete(`/deletetask/${taskId}`);
         fetchTasks();
       } catch (error) {
-        console.error("Error deleting task:", error);
+        console.error("Error Deleting Task:", error);
       }
     }
   };
@@ -42,6 +44,19 @@ export default function TaskList({ ticketId }) {
     setEditingTask(null);
     fetchTasks();
   };
+
+  //  <Link
+  //                 href={`/tasks/edit/${task.id}`}
+  //                 className="bg-blue-600 hover:bg-blue-700 rounded cursor-pointer text-white p-2.5 mr-2"
+  //               >
+  //                 Edit
+  //               </Link>
+  //               <Link
+  //                 href={`/tasks/create`}
+  //                 className="bg-green-600 hover:bg-green-500 text-white p-2 rounded mb-4"
+  //               >
+  //                 Add Task
+  //  </Link>
 
   return (
     <div className="mb-8">
@@ -67,11 +82,12 @@ export default function TaskList({ ticketId }) {
       <table className="w-full border-collapse bg-white shadow-md rounded">
         <thead>
           <tr className="bg-gray-200">
-            <th className="p-2 text-left">Title</th>
-            <th className="p-2 text-left">Description</th>
-            <th className="p-2 text-left">Assigned To</th>
-            <th className="p-2 text-left">Status</th>
-            <th className="p-2 text-left">Actions</th>
+            <th className="p-2 text-left">ID</th>
+            <th className="p-2 text-left">TITLE</th>
+            <th className="p-2 text-left">DESCRIPTION</th>
+            <th className="p-2 text-left">ASSIGNED TO</th>
+            <th className="p-2 text-left">STATUS</th>
+            <th className="p-2 text-left">ACTIONS</th>
           </tr>
         </thead>
         <tbody>
@@ -80,20 +96,33 @@ export default function TaskList({ ticketId }) {
               key={task.id}
               className="border-b border-gray-200 hover:bg-gray-50"
             >
+              <td className="p-2">{task.id}</td>
               <td className="p-2">{task.title}</td>
               <td className="p-2">{task.description}</td>
               <td className="p-2">{task.assigned_to}</td>
               <td className="p-2">{task.status}</td>
               <td className="p-2">
+                <Link
+                  href={`/tasks/${task.id}`}
+                  className="text-white bg-purple-600 hover:bg-purple-700 p-2.5 cursor-pointer rounded mr-2"
+                >
+                  View
+                </Link>
                 <button
                   onClick={() => handleEdit(task)}
-                  className="text-blue-600 hover:underline mr-2"
+                  className="bg-blue-600 hover:bg-blue-700 rounded cursor-pointer text-white p-1.5 mr-2"
                 >
                   Edit
                 </button>
+                {/* <button
+                  onClick={() => handleView(task.id)}
+                  className="bg-purple-600 hover:bg-purple-700 rounded cursor-pointer text-white p-1.5 mr-2"
+                >
+                  View
+                </button> */}
                 <button
                   onClick={() => handleDelete(task.id)}
-                  className="text-red-600 hover:underline"
+                  className="bg-red-600 hover:bg-red-700 rounded cursor-pointer text-white p-1.5"
                 >
                   Delete
                 </button>

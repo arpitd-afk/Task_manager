@@ -31,7 +31,7 @@ export default function Dashboard() {
         const taskRes = await api.get("/tasks/status");
         setTaskStatuses(taskRes.data.tasksByStatus || []);
       } catch (error) {
-        console.error("Error fetching dashboard data:", error);
+        console.error("Error Fetching Dashboard Data:", error);
       }
     };
     fetchData();
@@ -48,7 +48,7 @@ export default function Dashboard() {
   }));
 
   return (
-    <div className="p-6 lg:ml-64  min-h-screen">
+    <div className="p-6 md:ml-64  min-h-screen">
       <h1 className="text-4xl font-extrabold text-gray-500 mb-8">
         {role} - Dashboard
       </h1>

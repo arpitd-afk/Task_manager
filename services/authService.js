@@ -1,5 +1,4 @@
 import axios from "axios";
-import Cookies from "js-cookie";
 import api from "@/lib/api";
 
 const API_BASE = process.env.API_BASE_URL || "http://localhost:5000/api";

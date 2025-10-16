@@ -21,15 +21,18 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="bg-gray-600 text-white p-4 shadow-md ml-64">
+    <header className="bg-gray-600   text-white p-4 shadow-md ml-64">
       <div className="container mx-auto flex justify-between items-center">
         {user && (
           <span className="text-lg font-semibold mr-8">
-            WELCOME, {user.name || "User"}...
+            Welcome, {user.name || "User"}...
           </span>
         )}{" "}
-        <nav className="flex space-x-4 items-center">
-          <button onClick={logout} className="hover:underline text-lg">
+        <nav className="flex space-x-4 items-center ">
+          <button
+            onClick={logout}
+            className="cursor-pointer text-md bg-white text-gray-700 p-1.5 rounded"
+          >
             Logout
           </button>
         </nav>

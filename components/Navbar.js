@@ -5,7 +5,7 @@ import Link from "next/link";
 function Navbar() {
   const { user, logout } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  console.log("Navbar user:", user);
+  console.log("Navbar User:", user);
 
   const handleLogout = () => {
     logout();

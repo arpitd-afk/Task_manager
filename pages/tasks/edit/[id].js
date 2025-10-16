@@ -1,9 +1,9 @@
+import TaskForm from "@/components/TaskForm";
 import Header from "../../../components/Header";
 import Sidebar from "../../../components/Sidebar";
-import TicketForm from "../../../components/TicketForm";
 import { useRouter } from "next/router";
 
-export default function EditTicketPage() {
+export default function EditTaskPage() {
   const router = useRouter();
   const { id } = router.query;
 
@@ -13,7 +13,7 @@ export default function EditTicketPage() {
       <div className="flex-1 flex flex-col">
         <Header />
         <main>
-          <TicketForm ticketId={id} />
+          <TaskForm taskId={id} />
         </main>
       </div>
     </div>

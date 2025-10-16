@@ -19,12 +19,12 @@ export default function TicketList() {
   }, []);
 
   const handleDelete = async (id) => {
-    if (confirm("Are you Sure?")) {
+    if (confirm("Are You Sure?")) {
       try {
         await api.delete(`/deleteticket/${id}`);
         setTickets(tickets.filter((ticket) => ticket.id !== id));
       } catch (error) {
-        console.error("Error deleting ticket:", error);
+        console.error("Error Deleting Ticket:", error);
       }
     }
   };
@@ -35,7 +35,7 @@ export default function TicketList() {
         <h2 className="text-3xl font-bold mb-4 text-gray-500">TICKETS</h2>
         <Link
           href="/tickets/create"
-          className="bg-green-600 text-white p-2 rounded mb-4 inline-block"
+          className="bg-green-600 hover:bg-green-700 text-white p-2 rounded mb-4 inline-block"
         >
           Create Ticket
         </Link>
@@ -44,10 +44,10 @@ export default function TicketList() {
         <thead>
           <tr className="bg-gray-200">
             <th className="p-2 text-left">ID</th>
-            <th className="p-2 text-left">Title</th>
-            <th className="p-2 text-left">Status</th>
-            <th className="p-2 text-left">Priority</th>
-            <th className="p-2 text-left">Actions</th>
+            <th className="p-2 text-left">TITLE</th>
+            <th className="p-2 text-left">STATUS</th>
+            <th className="p-2 text-left">PRIORITY</th>
+            <th className="p-2 text-left">ACTIONS</th>
           </tr>
         </thead>
         <tbody>
@@ -63,13 +63,13 @@ export default function TicketList() {
               <td className="p-2">
                 <Link
                   href={`/tickets/${ticket.id}`}
-                  className="text-blue-600 hover:text-blue-700 hover:underline mr-4"
+                  className="text-white bg-blue-600 hover:bg-blue-700 p-2 cursor-pointer rounded mr-4"
                 >
                   View
                 </Link>
                 <button
                   onClick={() => handleDelete(ticket.id)}
-                  className="text-red-600 hover:text-red-700 hover:underline"
+                  className="bg-red-600 hover:bg-red-700 p-1.5 text-white cursor-pointer rounded"
                 >
                   Delete
                 </button>

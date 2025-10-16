@@ -2,16 +2,25 @@ import { useEffect, useState } from "react";
 import api from "../lib/api";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
+import { useRouter } from "next/router";
+import { isAuthenticated } from "@/lib/auth";
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      router.push("/auth/login");
+    }
+  }, [router]);
 
   const fetchNotifications = async () => {
     try {
       const res = await api.get("/getnotification");
       setNotifications(res.data.notifications || []);
     } catch (error) {
-      console.error("Error fetching notifications:", error);
+      console.error("Error Fetching Notifications:", error);
     }
   };
 
@@ -24,7 +33,7 @@ export default function Notifications() {
       await api.put(`/updatenotification/${id}`);
       fetchNotifications();
     } catch (error) {
-      console.error("Error marking as read:", error);
+      console.error("Error Marking As Read:", error);
     }
   };
 
@@ -34,7 +43,7 @@ export default function Notifications() {
         await api.delete(`/deletenotification/${id}`);
         fetchNotifications();
       } catch (error) {
-        console.error("Error deleting notification:", error);
+        console.error("Error Deleting Notification:", error);
       }
     }
   };
@@ -45,7 +54,9 @@ export default function Notifications() {
       <div className="flex-1 flex flex-col">
         <Header />
         <div className="p-4 ml-64">
-          <h2 className="text-2xl font-bold mb-4">Notifications</h2>
+          <h2 className="text-3xl text-gray-500 font-bold mb-4">
+            NOTIFICATIONS
+          </h2>
           <ul className="space-y-4">
             {notifications.map((notif) => (
               <li

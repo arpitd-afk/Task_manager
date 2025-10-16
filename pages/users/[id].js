@@ -1,4 +1,3 @@
-// pages/users/[id].js
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import UserForm from "../../components/UserForm";

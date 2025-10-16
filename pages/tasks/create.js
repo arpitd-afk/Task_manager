@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
-import Dashboard from "../../components/Dashboard";
-import { isAuthenticated } from "@/lib/auth";
+import { isAuthenticated } from "../../lib/auth";
+import TaskForm from "@/components/TaskForm";
 
-export default function DashboardPage() {
+export default function CreateTaskPage() {
   const router = useRouter();
 
   useEffect(() => {
@@ -18,8 +18,8 @@ export default function DashboardPage() {
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Header />
-        <main className="p-4">
-          <Dashboard />
+        <main>
+          <TaskForm />
         </main>
       </div>
     </div>

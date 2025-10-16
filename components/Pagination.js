@@ -2,12 +2,11 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 
 export default function Pagination({
-  totalItems = 55,
+  totalItems = 20,
   itemsPerPage = 10,
   onPageChange,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
-
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const handlePrevious = () => {

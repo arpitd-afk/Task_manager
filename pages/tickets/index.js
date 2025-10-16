@@ -10,7 +10,7 @@ export default function TicketsPage() {
 
   useEffect(() => {
     if (!isAuthenticated()) {
-      router.push("/login");
+      router.push("/auth/login");
     }
   }, [router]);
 

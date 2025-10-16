@@ -10,7 +10,7 @@ export default function CreateUserPage() {
 
   useEffect(() => {
     if (!isAuthenticated()) {
-      router.push("/login");
+      router.push("/auth/login");
     }
   }, [router]);
 
@@ -19,7 +19,7 @@ export default function CreateUserPage() {
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Header />
-        <main className="p-4">
+        <main>
           <UserForm />
         </main>
       </div>
