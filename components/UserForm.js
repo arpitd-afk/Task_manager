@@ -52,7 +52,7 @@ export default function UserForm({ userId }) {
     <div className="bg-gray-100 py-20">
       <form
         onSubmit={handleSubmit}
-        className="p-8 w-120 mx-auto bg-white rounded  md:ml-80"
+        className="p-8 w-120 mx-auto bg-white rounded  md:ml-130"
       >
         <h2 className="text-3xl text-gray-500 font-bold mb-4">
           {userId ? "EDIT" : "CREATE"} USER
@@ -105,7 +105,7 @@ export default function UserForm({ userId }) {
         </div> */}
         <button
           type="submit"
-          className="bg-blue-600 text-white p-2.5 w-30 rounded hover:bg-blue-700"
+          className="bg-blue-600 text-white p-2.5 w-30 rounded hover:bg-blue-700 cursor-pointer"
         >
           Save
         </button>

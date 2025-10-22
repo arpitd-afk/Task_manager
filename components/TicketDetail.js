@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import api from "../lib/api";
 import Link from "next/link";
 import TaskList from "./TaskList";
+import CommentSection from "./CommentSection";
 
 export default function TicketDetail() {
   const router = useRouter();
@@ -49,6 +50,7 @@ export default function TicketDetail() {
         </Link>
       </div>
       <TaskList ticketId={id} />
+      <CommentSection ticketId={id} />
     </div>
   );
 }

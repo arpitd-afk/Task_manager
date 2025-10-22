@@ -2,49 +2,54 @@ import { useEffect, useState } from "react";
 import api from "../lib/api";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
-import { useRouter } from "next/router";
-import { isAuthenticated } from "@/lib/auth";
+import Pagination from "../components/Pagination";
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
-  const router = useRouter();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (!isAuthenticated()) {
-      router.push("/auth/login");
-    }
-  }, [router]);
+  const ITEMS_PER_PAGE = 10;
 
-  const fetchNotifications = async () => {
+  const fetchNotifications = async (page = 1) => {
+    setLoading(true);
     try {
-      const res = await api.get("/getnotification");
+      const res = await api.get(
+        `/getnotification?page=${page}&limit=${ITEMS_PER_PAGE}`
+      );
       setNotifications(res.data.notifications || []);
+      setTotalPages(res.data.totalPages || 1);
     } catch (error) {
       console.error("Error Fetching Notifications:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchNotifications();
-  }, []);
+    fetchNotifications(currentPage);
+  }, [currentPage]);
 
   const handleMarkRead = async (id) => {
     try {
       await api.put(`/updatenotification/${id}`);
-      fetchNotifications();
+      setNotifications((prev) =>
+        prev.map((notif) =>
+          notif.id === id ? { ...notif, is_read: true } : notif
+        )
+      );
     } catch (error) {
       console.error("Error Marking As Read:", error);
     }
   };
 
   const handleDelete = async (id) => {
-    if (confirm("Are you sure?")) {
-      try {
-        await api.delete(`/deletenotification/${id}`);
-        fetchNotifications();
-      } catch (error) {
-        console.error("Error Deleting Notification:", error);
-      }
+    try {
+      await api.delete(`/deletenotification/${id}`);
+      setNotifications((prev) => prev.filter((notif) => notif.id !== id));
+    } catch (error) {
+      console.error("Error Deleting Notification:", error);
     }
   };
 
@@ -57,42 +62,51 @@ export default function Notifications() {
           <h2 className="text-3xl text-gray-500 font-bold mb-4">
             NOTIFICATIONS
           </h2>
-          <ul className="space-y-4">
-            {notifications.map((notif) => (
-              <li
-                key={notif.id}
-                className="bg-white p-4 rounded shadow flex justify-between items-center"
-              >
-                <div>
-                  <p>{notif.message}</p>
-                  <p className="text-sm text-gray-500">
-                    {new Date(notif.created_at).toLocaleString()}
-                  </p>
-                  {notif.is_read ? (
-                    <span className="text-green-500">Read</span>
-                  ) : (
-                    <span className="text-red-500">Unread</span>
-                  )}
-                </div>
-                <div>
-                  {!notif.is_read && (
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <ul className="space-y-4">
+              {notifications.map((notif) => (
+                <li
+                  key={notif.id}
+                  className="bg-white p-4 rounded shadow flex justify-between items-center"
+                >
+                  <div>
+                    <p>{notif.message}</p>
+                    <p className="text-sm text-gray-500">
+                      {new Date(notif.created_at).toLocaleString()}
+                    </p>
+                    {notif.is_read ? (
+                      <span className="text-green-500">Read</span>
+                    ) : (
+                      <span className="text-red-500">Unread</span>
+                    )}
+                  </div>
+                  <div>
+                    {!notif.is_read && (
+                      <button
+                        onClick={() => handleMarkRead(notif.id)}
+                        className="text-blue-600 cursor-pointer mr-2"
+                      >
+                        Mark Read
+                      </button>
+                    )}
                     <button
-                      onClick={() => handleMarkRead(notif.id)}
-                      className="text-blue-600 hover:underline mr-2"
+                      onClick={() => handleDelete(notif.id)}
+                      className="text-red-600 cursor-pointer"
                     >
-                      Mark Read
+                      Delete
                     </button>
-                  )}
-                  <button
-                    onClick={() => handleDelete(notif.id)}
-                    className="text-red-600 hover:underline"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+          <Pagination
+            totalItems={totalPages * ITEMS_PER_PAGE}
+            itemsPerPage={ITEMS_PER_PAGE}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </div>
     </div>

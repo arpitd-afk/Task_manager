@@ -17,7 +17,7 @@ export default function UserList() {
     fetchUsers();
   }, []);
   const handleDelete = async (id) => {
-    if (confirm("Are you sure?")) {
+    if (confirm("Are You Sure?")) {
       try {
         await api.delete(`/deleteuser/${id}`);
         setUsers(users.filter((user) => user.id !== id));

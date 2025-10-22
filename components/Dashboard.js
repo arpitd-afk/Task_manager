@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../lib/api";
-import { getUserRole } from "@/lib/auth";
+import { useAuth } from "@/lib/auth";
 import {
   Bar,
   BarChart,
@@ -10,11 +10,11 @@ import {
   Tooltip,
   XAxis,
   YAxis,
+  Legend,
 } from "recharts";
-import { Legend } from "recharts";
 
 export default function Dashboard() {
-  const role = getUserRole();
+  const { getUserRole } = useAuth();
   const [summary, setSummary] = useState([]);
   const [priorities, setPriorities] = useState([]);
   const [taskStatuses, setTaskStatuses] = useState([]);
@@ -48,14 +48,14 @@ export default function Dashboard() {
   }));
 
   return (
-    <div className="p-6 md:ml-64  min-h-screen">
+    <div className="p-6 md:ml-64 min-h-screen">
       <h1 className="text-4xl font-extrabold text-gray-500 mb-8">
-        {role} - Dashboard
+        {getUserRole() || "User"} - Dashboard
       </h1>
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg">
-          <h3 className="text-2xl font-semibold text-gray-700 mb-4">
+          <h3 className="text-2xl font-semibold text-center text-gray-700 mb-4">
             TICKET SUMMARY
           </h3>
           <ul className="space-y-2">
@@ -70,9 +70,9 @@ export default function Dashboard() {
             ))}
           </ul>
         </div>
-        {/* ticket by priority */}
+        {/* Ticket by Priority */}
         <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg">
-          <h3 className="text-2xl font-semibold text-gray-700 mb-4">
+          <h3 className="text-2xl font-semibold text-center text-gray-700 mb-4">
             TICKET PRIORITY
           </h3>
           <ul className="space-y-2">
@@ -87,9 +87,9 @@ export default function Dashboard() {
             ))}
           </ul>
         </div>
-        {/* ticket by status */}
+        {/* Ticket by Status */}
         <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg">
-          <h3 className="text-2xl font-semibold text-gray-700 mb-4">
+          <h3 className="text-2xl font-semibold text-center text-gray-700 mb-4">
             TASK STATUS
           </h3>
           <ul className="space-y-2">
@@ -139,10 +139,8 @@ export default function Dashboard() {
         <YAxis />
         <Tooltip />
         <Legend />
-        <Bar dataKey="pv" fill="#2419ffff" />
-        <Bar dataKey="uv" fill="#17e265ff" />
+        <Bar dataKey="value" fill="#2419ffff" />{" "}
       </BarChart>
-      ;
     </div>
   );
 }

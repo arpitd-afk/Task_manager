@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import api from "../../lib/api";
-import { login } from "../../lib/auth";
+import { useAuth } from "../../lib/auth";
 import Link from "next/link";
 
 export default function Login() {
+  const { login } = useAuth();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const router = useRouter();

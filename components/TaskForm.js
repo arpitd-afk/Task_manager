@@ -45,8 +45,8 @@ export default function TaskForm({ ticketId, task, onSuccess }) {
   };
 
   return (
-    <div className="bg-gray-100  py-20 w-120 rounded mb-4">
-      <form onSubmit={handleSubmit} className="p-4 ">
+    <div className="bg-white rounded mb-4">
+      <form onSubmit={handleSubmit} className="p-4">
         <div className="mb-4">
           <label className="block text-md font-medium">Title</label>
           <input
@@ -96,10 +96,10 @@ export default function TaskForm({ ticketId, task, onSuccess }) {
         </div>
         <button
           type="submit"
-          className="bg-blue-600 w-30 text-white p-2 rounded hover:bg-blue-700"
+          className="bg-blue-600 w-full text-white p-2 rounded cursor-pointer hover:bg-blue-700"
           disabled={isLoading}
         >
-          {isLoading ? "Saving..." : "Save Task"}
+          {isLoading ? "Saving..." : task ? "Update Task" : "Save Task"}
         </button>
       </form>
     </div>

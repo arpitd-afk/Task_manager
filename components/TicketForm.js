@@ -44,7 +44,7 @@ export default function TicketForm({ ticketId }) {
       }
       router.push("/tickets");
     } catch (error) {
-      console.error("Error saving ticket:", error);
+      console.error("Error Saving Ticket:", error);
     }
   };
 
@@ -52,7 +52,7 @@ export default function TicketForm({ ticketId }) {
     <div className="bg-gray-100 py-20">
       <form
         onSubmit={handleSubmit}
-        className="p-8 w-120 mx-auto bg-white rounded  md:ml-80"
+        className="p-8 w-120 mx-auto bg-white rounded  md:ml-130"
       >
         <h2 className="text-3xl font-bold text-gray-500 mb-4">
           {ticketId ? "EDIT" : "CREATE"} TICKET

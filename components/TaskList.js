@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import api from "../lib/api";
 import TaskForm from "./TaskForm";
 import Pagination from "./Pagination";
-import { useRouter } from "next/router";
 import Link from "next/link";
+import Modal from "./Modal";
 
 export default function TaskList({ ticketId }) {
-  const router = useRouter();
   const [tasks, setTasks] = useState([]);
-  const [showForm, setShowForm] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
 
   const fetchTasks = async () => {
@@ -19,6 +18,7 @@ export default function TaskList({ ticketId }) {
       console.error("Error Fetching Tasks:", error);
     }
   };
+
   useEffect(() => {
     fetchTasks();
   }, [ticketId]);
@@ -36,27 +36,14 @@ export default function TaskList({ ticketId }) {
 
   const handleEdit = (task) => {
     setEditingTask(task);
-    setShowForm(true);
+    setIsModalOpen(true);
   };
 
   const handleSuccess = () => {
-    setShowForm(false);
+    setIsModalOpen(false);
     setEditingTask(null);
     fetchTasks();
   };
-
-  //  <Link
-  //                 href={`/tasks/edit/${task.id}`}
-  //                 className="bg-blue-600 hover:bg-blue-700 rounded cursor-pointer text-white p-2.5 mr-2"
-  //               >
-  //                 Edit
-  //               </Link>
-  //               <Link
-  //                 href={`/tasks/create`}
-  //                 className="bg-green-600 hover:bg-green-500 text-white p-2 rounded mb-4"
-  //               >
-  //                 Add Task
-  //  </Link>
 
   return (
     <div className="mb-8">
@@ -64,21 +51,23 @@ export default function TaskList({ ticketId }) {
         <h3 className="text-3xl text-gray-500 font-semibold mb-2">TASKS</h3>
         <button
           onClick={() => {
-            setShowForm(!showForm);
+            setIsModalOpen(true);
             setEditingTask(null);
           }}
-          className="bg-green-600 hover:bg-green-500 text-white p-2 rounded mb-4"
+          className="bg-green-600 hover:bg-green-500 cursor-pointer text-white p-2 rounded mb-4"
         >
-          {showForm ? "Cancel" : "Add Task"}
+          Add Task
         </button>
       </div>
-      {showForm && (
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <TaskForm
           ticketId={ticketId}
           task={editingTask}
           onSuccess={handleSuccess}
         />
-      )}
+      </Modal>
+
       <table className="w-full border-collapse bg-white shadow-md rounded">
         <thead>
           <tr className="bg-gray-200">
@@ -114,12 +103,6 @@ export default function TaskList({ ticketId }) {
                 >
                   Edit
                 </button>
-                {/* <button
-                  onClick={() => handleView(task.id)}
-                  className="bg-purple-600 hover:bg-purple-700 rounded cursor-pointer text-white p-1.5 mr-2"
-                >
-                  View
-                </button> */}
                 <button
                   onClick={() => handleDelete(task.id)}
                   className="bg-red-600 hover:bg-red-700 rounded cursor-pointer text-white p-1.5"
@@ -135,3 +118,24 @@ export default function TaskList({ ticketId }) {
     </div>
   );
 }
+{
+  /* <button
+                  onClick={() => handleView(task.id)}
+                  className="bg-purple-600 hover:bg-purple-700 rounded cursor-pointer text-white p-1.5 mr-2"
+                >
+                  View
+                </button> */
+}
+
+//  <Link
+//                 href={`/tasks/edit/${task.id}`}
+//                 className="bg-blue-600 hover:bg-blue-700 rounded cursor-pointer text-white p-2.5 mr-2"
+//               >
+//                 Edit
+//               </Link>
+//               <Link
+//                 href={`/tasks/create`}
+//                 className="bg-green-600 hover:bg-green-500 text-white p-2 rounded mb-4"
+//               >
+//                 Add Task
+//  </Link>

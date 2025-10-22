@@ -14,7 +14,7 @@ export default function TaskDetail() {
           const res = await api.get(`/gettask/${id}`);
           setTask(res.data);
         } catch (error) {
-          console.error("Error fetching task:", error);
+          console.error("Error Fetching Task:", error);
         }
       };
       fetchTask();
@@ -58,6 +58,12 @@ export default function TaskDetail() {
           <div className="flex">
             <p className="font-semibold text-gray-600">Status:</p>
             <p className="text-gray-500 ml-2">{task.status}</p>
+          </div>
+          <div className="flex">
+            <p className="font-semibold text-gray-600">Created At:</p>
+            <p className="text-gray-500 ml-2">
+              {new Date(task.created_at).toLocaleString()}
+            </p>
           </div>
         </div>
       </div>

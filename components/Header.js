@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { logout } from "../lib/auth";
+import { useAuth } from "../lib/auth";
 import { jwtDecode } from "jwt-decode";
 
 export default function Header() {
   const [user, setUser] = useState(null);
+  const { logout } = useAuth();
 
   useEffect(() => {
     function fetchUserFromToken() {
@@ -14,7 +15,7 @@ export default function Header() {
           setUser({ name: decodedToken.name });
         }
       } catch (error) {
-        console.error("Failed to decode token:", error);
+        console.error("Failed to get User from token:", error);
       }
     }
     fetchUserFromToken();

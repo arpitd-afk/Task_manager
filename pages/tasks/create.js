@@ -1,18 +1,8 @@
-import { useEffect } from "react";
-import { useRouter } from "next/router";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
-import { isAuthenticated } from "../../lib/auth";
 import TaskForm from "@/components/TaskForm";
 
 export default function CreateTaskPage() {
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!isAuthenticated()) {
-      router.push("/auth/login");
-    }
-  }, [router]);
   return (
     <div className="flex min-h-screen">
       <Sidebar />
