@@ -87,7 +87,7 @@ export default function Dashboard() {
             ))}
           </ul>
         </div>
-        {/* Ticket by Status */}
+        {/* Task by Status */}
         <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg">
           <h3 className="text-2xl font-semibold text-center text-gray-700 mb-4">
             TASK STATUS
@@ -105,6 +105,7 @@ export default function Dashboard() {
           </ul>
         </div>
       </div>
+
       {/* Line Chart */}
       <h2 className="text-2xl font-extrabold text-gray-500 mt-12 ml-2">
         LINE CHART - TICKET SUMMARY
@@ -123,6 +124,7 @@ export default function Dashboard() {
         <Legend />
         <Line type="monotone" dataKey="count" stroke="#2e23f8ff" />
       </LineChart>
+
       {/* Bar Chart */}
       <h2 className="text-2xl font-extrabold text-gray-500 mt-12 ml-2">
         BAR CHART - TICKET PRIORITY
@@ -139,7 +141,7 @@ export default function Dashboard() {
         <YAxis />
         <Tooltip />
         <Legend />
-        <Bar dataKey="value" fill="#2419ffff" />{" "}
+        <Bar dataKey="value" fill="#2419ffff" />
       </BarChart>
     </div>
   );
