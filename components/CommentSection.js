@@ -59,7 +59,6 @@ export default function CommentSection({ ticketId }) {
       console.error("Error Deleting Comment:", error);
     }
   };
-
   const handleSaveReply = async (commentId) => {
     try {
       const replyText = replies[commentId]?.trim();
@@ -78,7 +77,6 @@ export default function CommentSection({ ticketId }) {
       console.error("Error Saving Reply:", error);
     }
   };
-
   const handleDeleteReply = async (replyId) => {
     if (!confirm("Delete This Reply?")) return;
     try {
@@ -108,12 +106,10 @@ export default function CommentSection({ ticketId }) {
     setReplies({ ...replies, [commentId]: "" });
     setEditingReply({ ...editingReply, [commentId]: null });
   };
-
   return (
     <div className="p-4">
       <h3 className="text-3xl text-gray-500 font-bold mb-3">COMMENTS</h3>
 
-      {/* Comment input section*/}
       <div className="mb-4">
         <textarea
           value={newComment}
@@ -140,7 +136,6 @@ export default function CommentSection({ ticketId }) {
         </div>
       </div>
 
-      {/* Comment list section*/}
       <div className="space-y-4">
         {comments.map((comment) => (
           <div key={comment.id} className="bg-gray-100 p-4 rounded">
@@ -164,7 +159,6 @@ export default function CommentSection({ ticketId }) {
               </button>
             </div>
 
-            {/* Replies section */}
             <div className="ml-4 mt-3 space-y-2">
               {comment.replies.map((reply) => (
                 <div key={reply.id} className="bg-white p-2 rounded">
@@ -190,7 +184,6 @@ export default function CommentSection({ ticketId }) {
                 </div>
               ))}
 
-              {/* Reply input section */}
               <textarea
                 value={replies[comment.id] || ""}
                 onChange={(e) =>

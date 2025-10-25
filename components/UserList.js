@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import api from "../lib/api";
 import Pagination from "./Pagination";
+import { deleteUser, getAllUsers } from "@/helper/User";
 
 export default function UserList() {
   const [users, setUsers] = useState([]);
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await api.get("/allusers");
+        const res = await getAllUsers();
         setUsers(res.data.data || []);
       } catch (error) {
         console.error("Error Fetching Users:", error);
@@ -19,7 +19,7 @@ export default function UserList() {
   const handleDelete = async (id) => {
     if (confirm("Are You Sure?")) {
       try {
-        await api.delete(`/deleteuser/${id}`);
+        await deleteUser();
         setUsers(users.filter((user) => user.id !== id));
       } catch (error) {
         console.error("Error Deleting User:", error);

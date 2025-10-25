@@ -3,6 +3,7 @@ import api from "../lib/api";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Pagination from "../components/Pagination";
+import { getNotifications } from "@/helper/Notification";
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
@@ -15,9 +16,7 @@ export default function Notifications() {
   const fetchNotifications = async (page = 1) => {
     setLoading(true);
     try {
-      const res = await api.get(
-        `/getnotification?page=${page}&limit=${ITEMS_PER_PAGE}`
-      );
+      const res = await getNotifications();
       setNotifications(res.data.notifications || []);
       setTotalPages(res.data.totalPages || 1);
     } catch (error) {

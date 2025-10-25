@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import api from "../lib/api";
 import { useAuth } from "@/lib/auth";
 import {
   Bar,
@@ -12,6 +11,11 @@ import {
   YAxis,
   Legend,
 } from "recharts";
+import {
+  getTaskStatus,
+  getTicketPriority,
+  getTicketSummary,
+} from "@/helper/Dashboard";
 
 export default function Dashboard() {
   const { getUserRole } = useAuth();
@@ -22,13 +26,13 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const sumRes = await api.get("/tickets/summary");
+        const sumRes = await getTicketSummary();
         setSummary(sumRes.data.summary || []);
 
-        const priRes = await api.get("/tickets/priority");
+        const priRes = await getTicketPriority();
         setPriorities(priRes.data.ticketsByPriority || []);
 
-        const taskRes = await api.get("/tasks/status");
+        const taskRes = await getTaskStatus();
         setTaskStatuses(taskRes.data.tasksByStatus || []);
       } catch (error) {
         console.error("Error Fetching Dashboard Data:", error);

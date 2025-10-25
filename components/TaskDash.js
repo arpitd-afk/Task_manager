@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import api from "../lib/api";
 import Pagination from "./Pagination";
+import { getAllTasks } from "@/helper/Tasks";
 
 export default function TaskList({ ticketId }) {
   const [tasks, setTasks] = useState([]);
 
   const fetchTasks = async () => {
     try {
-      const res = await api.get(`/getalltasks`);
+      const res = await getAllTasks();
       setTasks(res.data.tasks || []);
     } catch (error) {
       console.error("Error Fetching Tasks:", error);
