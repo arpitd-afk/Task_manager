@@ -9,7 +9,7 @@ export default function Modal({ isOpen, onClose, children }) {
           onClick={onClose}
           className="absolute top-2 text-3xl right-2 text-gray-500 cursor-pointer hover:text-gray-700"
         >
-          <IoClose />{" "}
+          <IoClose />
         </button>
         {children}
       </div>

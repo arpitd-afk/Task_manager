@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import api from "../lib/api";
-import Link from "next/link";
 import TaskList from "./TaskList";
 import CommentSection from "./CommentSection";
 
@@ -29,25 +28,46 @@ export default function TicketDetail() {
   return (
     <div className="p-4 ml-64">
       <h2 className="text-3xl font-bold text-gray-500 mb-4">TICKET DETAILS</h2>
-      <div className="bg-white w-full text-gray-800 text-sm p-4 rounded shadow mb-4">
-        <p className="mb-2">
-          <strong>TITLE:</strong> {ticket.title}
-        </p>
-        <p className="mb-2">
-          <strong>DESCRIPTION:</strong> {ticket.description}
-        </p>
-        <p className="mb-2">
-          <strong>PRIORITY:</strong> {ticket.priority}
-        </p>
-        <p className="mb-2">
-          <strong>STATUS:</strong> {ticket.status}
-        </p>
-        <Link
-          href={`/tickets/edit/${id}`}
-          className="text-white font-semibold mt-4 text-md bg-blue-500 w-30 p-2.5 justify-end rounded-sm hover:bg-blue-600 mt-4 mr-2"
-        >
-          Edit
-        </Link>
+      <div className="bg-white w-full text-gray-800 text-sm p-6 rounded-lg shadow-md border border-gray-100 mb-6 hover:shadow-lg transition-shadow duration-300">
+        <div className="mb-4 border-b border-gray-200 pb-3">
+          <h2 className="text-lg font-semibold text-gray-900">
+            {ticket.title}
+          </h2>
+        </div>
+        <div className="space-y-3">
+          <p className="flex items-start">
+            <span className="font-medium text-gray-600 w-28">Description:</span>
+            <span className="text-gray-800 flex-1">{ticket.description}</span>
+          </p>
+          <p className="flex items-center">
+            <span className="font-medium text-gray-600 w-28">Priority:</span>
+            <span
+              className={`px-2 py-1 text-xs font-semibold rounded ${
+                ticket.priority === "High"
+                  ? "bg-red-100 text-red-700"
+                  : ticket.priority === "Medium"
+                  ? "bg-yellow-100 text-yellow-700"
+                  : "bg-green-100 text-green-700"
+              }`}
+            >
+              {ticket.priority}
+            </span>
+          </p>
+          <p className="flex items-center">
+            <span className="font-medium text-gray-600 w-28">Status:</span>
+            <span
+              className={`px-2 py-1 text-xs font-semibold rounded ${
+                ticket.status === "Open"
+                  ? "bg-green-100 text-green-700"
+                  : ticket.status === "In Progress"
+                  ? "bg-yellow-100 text-yellow-700"
+                  : "bg-blue-100 text-blue-700"
+              }`}
+            >
+              {ticket.status}
+            </span>
+          </p>
+        </div>
       </div>
       <TaskList ticketId={id} />
       <CommentSection ticketId={id} />

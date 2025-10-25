@@ -2,9 +2,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import api from "../lib/api";
 import Pagination from "./Pagination";
+import { useRouter } from "next/router";
+import { IoIosAddCircle } from "react-icons/io";
+import { FaEye, FaRegEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 export default function TicketList() {
   const [tickets, setTickets] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchTickets = async () => {
@@ -37,7 +42,7 @@ export default function TicketList() {
           href="/tickets/create"
           className="bg-green-600 hover:bg-green-700 text-white p-2 rounded mb-4 inline-block"
         >
-          Create Ticket
+          <IoIosAddCircle title="Create Ticket" />
         </Link>
       </div>
       <table className="w-full border-collapse bg-white shadow-md rounded">
@@ -61,17 +66,29 @@ export default function TicketList() {
               <td className="p-2">{ticket.status}</td>
               <td className="p-2">{ticket.priority}</td>
               <td className="p-2">
-                <Link
+                {/* <Link
                   href={`/tickets/${ticket.id}`}
                   className="text-white bg-blue-600 hover:bg-blue-700 p-2 cursor-pointer rounded mr-4"
                 >
                   View
-                </Link>
+                </Link> */}
+                <button
+                  onClick={() => router.push(`/tickets/${ticket.id}`)}
+                  className="text-white bg-purple-600 hover:bg-purple-700 p-1.5 cursor-pointer rounded mr-2"
+                >
+                  <FaEye title="View Ticket" />
+                </button>
+                <button
+                  onClick={() => router.push(`/tickets/edit/${ticket.id}`)}
+                  className="text-white text-md bg-blue-500 cursor-pointer p-1.5 rounded hover:bg-blue-600 mr-2"
+                >
+                  <FaRegEdit title="Edit Ticket" />
+                </button>
                 <button
                   onClick={() => handleDelete(ticket.id)}
                   className="bg-red-600 hover:bg-red-700 p-1.5 text-white cursor-pointer rounded"
                 >
-                  Delete
+                  <MdDelete title="Delete Ticket" />
                 </button>
               </td>
             </tr>

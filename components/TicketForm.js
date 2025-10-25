@@ -6,7 +6,7 @@ export default function TicketForm({ ticketId }) {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    priority: "Low",
+    priority: "Medium",
     status: "Open",
   });
   const router = useRouter();

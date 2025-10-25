@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { FaRegEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 import api from "../lib/api";
 
 export default function CommentSection({ ticketId }) {
@@ -59,6 +61,7 @@ export default function CommentSection({ ticketId }) {
       console.error("Error Deleting Comment:", error);
     }
   };
+
   const handleSaveReply = async (commentId) => {
     try {
       const replyText = replies[commentId]?.trim();
@@ -106,10 +109,12 @@ export default function CommentSection({ ticketId }) {
     setReplies({ ...replies, [commentId]: "" });
     setEditingReply({ ...editingReply, [commentId]: null });
   };
+
   return (
     <div className="p-4">
-      <h3 className="text-3xl text-gray-500 font-bold mb-3">COMMENTS</h3>
+      <h3 className="text-3xl text-gray-500 font-bold mb-3">COMMENTS:</h3>
 
+      {/* Comment input section*/}
       <div className="mb-4">
         <textarea
           value={newComment}
@@ -136,6 +141,7 @@ export default function CommentSection({ ticketId }) {
         </div>
       </div>
 
+      {/* Comment list section*/}
       <div className="space-y-4">
         {comments.map((comment) => (
           <div key={comment.id} className="bg-gray-100 p-4 rounded">
@@ -147,18 +153,19 @@ export default function CommentSection({ ticketId }) {
             <div className="mt-2">
               <button
                 onClick={() => startEditingComment(comment)}
-                className="text-blue-500 cursor-pointer hover:underline mr-3"
+                className="text-blue-500 text-lg  cursor-pointer mr-3"
               >
-                Edit
+                <FaRegEdit title="Edit Comment" />
               </button>
               <button
                 onClick={() => handleDeleteComment(comment.id)}
-                className="text-red-500 cursor-pointer hover:underline"
+                className="text-red-500 text-xl cursor-pointer"
               >
-                Delete
+                <MdDelete title="Delete Comment" />
               </button>
             </div>
 
+            {/* Replies section */}
             <div className="ml-4 mt-3 space-y-2">
               {comment.replies.map((reply) => (
                 <div key={reply.id} className="bg-white p-2 rounded">
@@ -170,20 +177,21 @@ export default function CommentSection({ ticketId }) {
                   <div className="mt-1">
                     <button
                       onClick={() => startEditingReply(comment.id, reply)}
-                      className="text-blue-500 cursor-pointer hover:underline mr-3"
+                      className="text-blue-500 text-lg  cursor-pointer mr-3"
                     >
-                      Edit
+                      <FaRegEdit title="Edit Reply" />
                     </button>
                     <button
                       onClick={() => handleDeleteReply(reply.id)}
-                      className="text-red-500 cursor-pointer hover:underline"
+                      className="text-red-500 text-xl cursor-pointer"
                     >
-                      Delete
+                      <MdDelete title="Delete Reply" />
                     </button>
                   </div>
                 </div>
               ))}
 
+              {/* Reply input section */}
               <textarea
                 value={replies[comment.id] || ""}
                 onChange={(e) =>

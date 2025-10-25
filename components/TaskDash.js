@@ -20,7 +20,9 @@ export default function TaskList({ ticketId }) {
   return (
     <div className="mb-8 ml-64">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-3xl text-gray-500 font-semibold mb-2">TASKS</h3>
+        <h3 className="text-3xl text-gray-500 font-semibold mb-2">
+          ALL TASKS LIST:
+        </h3>
       </div>
       <table className="w-full border-collapse bg-white shadow-md rounded">
         <thead>

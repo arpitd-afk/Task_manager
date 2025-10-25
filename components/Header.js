@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../lib/auth";
 import { jwtDecode } from "jwt-decode";
+import { IoMdLogOut } from "react-icons/io";
 
 export default function Header() {
   const [user, setUser] = useState(null);
@@ -32,9 +33,9 @@ export default function Header() {
         <nav className="flex space-x-4 items-center ">
           <button
             onClick={logout}
-            className="cursor-pointer text-md bg-white text-gray-700 p-1.5 rounded"
+            className="cursor-pointer text-2xl text-white"
           >
-            Logout
+            <IoMdLogOut title="Logout" />
           </button>
         </nav>
       </div>

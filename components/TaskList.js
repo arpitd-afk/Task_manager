@@ -4,11 +4,16 @@ import TaskForm from "./TaskForm";
 import Pagination from "./Pagination";
 import Link from "next/link";
 import Modal from "./Modal";
+import { IoIosAddCircle } from "react-icons/io";
+import { FaEye, FaRegEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import { useRouter } from "next/router";
 
 export default function TaskList({ ticketId }) {
   const [tasks, setTasks] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
+  const router = useRouter();
 
   const fetchTasks = async () => {
     try {
@@ -46,9 +51,11 @@ export default function TaskList({ ticketId }) {
   };
 
   return (
-    <div className="mb-8">
+    <div className="mb-8 pt-10">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-3xl text-gray-500 font-semibold mb-2">TASKS</h3>
+        <h3 className="text-3xl text-gray-500 font-semibold mb-2">
+          TASKS LIST:
+        </h3>
         <button
           onClick={() => {
             setIsModalOpen(true);
@@ -56,7 +63,7 @@ export default function TaskList({ ticketId }) {
           }}
           className="bg-green-600 hover:bg-green-500 cursor-pointer text-white p-2 rounded mb-4"
         >
-          Add Task
+          <IoIosAddCircle title="Create Task" />
         </button>
       </div>
 
@@ -91,23 +98,28 @@ export default function TaskList({ ticketId }) {
               <td className="p-2">{task.assigned_to}</td>
               <td className="p-2">{task.status}</td>
               <td className="p-2">
-                <Link
+                {/* <Link
                   href={`/tasks/${task.id}`}
-                  className="text-white bg-purple-600 hover:bg-purple-700 p-2.5 cursor-pointer rounded mr-2"
+                  className="text-white bg-purple-600 hover:bg-purple-700 p-1.5 cursor-pointer rounded mr-2"
+                ></Link> */}
+                <button
+                  onClick={() => router.push(`/tasks/${task.id}`)}
+                  className="text-white bg-purple-600 hover:bg-purple-700 p-1.5 cursor-pointer rounded mr-2"
                 >
-                  View
-                </Link>
+                  <FaEye title="View Task" />
+                </button>
+
                 <button
                   onClick={() => handleEdit(task)}
                   className="bg-blue-600 hover:bg-blue-700 rounded cursor-pointer text-white p-1.5 mr-2"
                 >
-                  Edit
+                  <FaRegEdit title="Edit Task" />
                 </button>
                 <button
                   onClick={() => handleDelete(task.id)}
                   className="bg-red-600 hover:bg-red-700 rounded cursor-pointer text-white p-1.5"
                 >
-                  Delete
+                  <MdDelete title="Delete Task" />
                 </button>
               </td>
             </tr>

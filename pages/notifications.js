@@ -4,6 +4,9 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Pagination from "../components/Pagination";
 import { getNotifications } from "@/helper/Notification";
+import { MdDelete, MdOutlineMarkEmailRead } from "react-icons/md";
+import { AiOutlineCheck } from "react-icons/ai";
+import { IoCheckmarkDoneSharp } from "react-icons/io5";
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
@@ -76,25 +79,29 @@ export default function Notifications() {
                       {new Date(notif.created_at).toLocaleString()}
                     </p>
                     {notif.is_read ? (
-                      <span className="text-green-500">Read</span>
+                      <span className="text-green-600 text-lg">
+                        <IoCheckmarkDoneSharp title="Read" />
+                      </span>
                     ) : (
-                      <span className="text-red-500">Unread</span>
+                      <span className="text-gray-400">
+                        <IoCheckmarkDoneSharp title="Unread" />
+                      </span>
                     )}
                   </div>
                   <div>
                     {!notif.is_read && (
                       <button
                         onClick={() => handleMarkRead(notif.id)}
-                        className="text-blue-600 cursor-pointer mr-2"
+                        className="bg-blue-500 hover:bg-blue-600 p-1.5 rounded text-white text-lg cursor-pointer mr-2"
                       >
-                        Mark Read
+                        <MdOutlineMarkEmailRead title="Make as Read" />
                       </button>
                     )}
                     <button
                       onClick={() => handleDelete(notif.id)}
-                      className="text-red-600 cursor-pointer"
+                      className="bg-red-500 hover:bg-red-600 p-1.5 rounded text-white text-lg cursor-pointer"
                     >
-                      Delete
+                      <MdDelete title="Delete" />
                     </button>
                   </div>
                 </li>

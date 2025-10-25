@@ -40,8 +40,8 @@ export default function Features() {
               </p>
               <p className="mt-6 text-lg/8 text-gray-700">
                 Our team of world-class designers, engineers, and project
-                managers is here to help your business grow. We have the
-                experience and expertise to help you reach your goals.
+                managers is here to help your business . We have the experience
+                and expertise to help you reach your goals.
               </p>
               <dl className="mt-10 max-w-xl space-y-8 text-base/7 text-gray-600 lg:max-w-none">
                 {features.map((feature) => (

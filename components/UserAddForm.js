@@ -1,34 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import api from "../lib/api";
 import { useRouter } from "next/router";
 
-export default function UserForm({ userId }) {
+export default function UserAddForm() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     role: "User",
+    password: "",
   });
   const router = useRouter();
-
-  useEffect(() => {
-    if (userId) {
-      const fetchUser = async () => {
-        try {
-          const res = await api.get(`/user/${userId}`);
-          const user = res.data[0] || {};
-          setFormData({
-            name: user.name,
-            email: user.email,
-            role: user.role,
-          });
-          console.log("Fetched User Data", user);
-        } catch (error) {
-          console.error("Error Fetching User Data:", error);
-        }
-      };
-      fetchUser();
-    }
-  }, [userId]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -37,10 +18,10 @@ export default function UserForm({ userId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.put(`/updateuser/${userId}`, formData);
+      await api.post("/signup", formData);
       router.push("/users");
     } catch (error) {
-      console.error("Error Saving User:", error);
+      console.error("Error Adding User:", error);
     }
   };
 
@@ -50,7 +31,7 @@ export default function UserForm({ userId }) {
         onSubmit={handleSubmit}
         className="p-8 w-120 mx-auto bg-white rounded  md:ml-130"
       >
-        <h2 className="text-3xl text-gray-500 font-bold mb-4">EDIT USER</h2>
+        <h2 className="text-3xl text-gray-500 font-bold mb-4">CREATE USER</h2>
         <div className="mb-4">
           <label className="block text-md font-medium">Name</label>
           <input
@@ -86,6 +67,16 @@ export default function UserForm({ userId }) {
             <option value="Agent">Agent</option>
             <option value="User">User</option>
           </select>
+        </div>
+        <div className="mb-4">
+          <label className="block text-md font-medium">Password</label>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            className="w-full p-2 text-gray-700 border rounded"
+          />
         </div>
         <button
           type="submit"

@@ -1,6 +1,6 @@
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
-import UserForm from "@/components/UserForm";
+import UserAddForm from "@/components/UserAddForm";
 
 export default function CreateUserPage() {
   return (
@@ -9,7 +9,7 @@ export default function CreateUserPage() {
       <div className="flex-1 flex flex-col">
         <Header />
         <main>
-          <UserForm />
+          <UserAddForm />
         </main>
       </div>
     </div>
