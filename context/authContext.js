@@ -11,8 +11,7 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const verifyToken = async () => {
       try {
-        const token =
-          localStorage.getItem("token") || Cookies.get("tokenfromfron");
+        const token = localStorage.getItem("token") || Cookies.get("token");
         console.log("Token From Cookie:", token);
         if (token) {
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;

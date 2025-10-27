@@ -9,7 +9,6 @@ export default function CommentSection({ ticketId }) {
   const [replies, setReplies] = useState({});
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editingReply, setEditingReply] = useState({});
-
   const fetchComments = async () => {
     try {
       const res = await api.get(`/getcommbyticket/${ticketId}`);
