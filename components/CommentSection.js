@@ -80,12 +80,12 @@ export default function CommentSection({ ticketId }) {
     }
   };
   const handleDeleteReply = async (replyId) => {
-    if (!confirm("Delete This Reply?")) return;
+    if (!confirm("Delete this Reply?")) return;
     try {
       await api.delete(`/deletereply/${replyId}`);
       fetchComments();
     } catch (error) {
-      console.error("Error Deleting Reply:", error);
+      console.error("Error deleting Reply:", error);
     }
   };
 
