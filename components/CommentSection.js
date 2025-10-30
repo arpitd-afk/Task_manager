@@ -23,7 +23,7 @@ export default function CommentSection({ ticketId }) {
       );
       setComments(updatedComments);
     } catch (error) {
-      console.error("Error Fetching Comments:", error);
+      console.error("Error fetching comments:", error);
     }
   };
   useEffect(() => {
@@ -47,17 +47,17 @@ export default function CommentSection({ ticketId }) {
       setNewComment("");
       fetchComments();
     } catch (error) {
-      console.error("Error Saving Comment:", error);
+      console.error("Error saving comment:", error);
     }
   };
 
   const handleDeleteComment = async (commentId) => {
-    if (!confirm("Delete This Comment?")) return;
+    if (!confirm("Delete this comment?")) return;
     try {
       await api.delete(`/deletecomment/${commentId}`);
       fetchComments();
     } catch (error) {
-      console.error("Error Deleting Comment:", error);
+      console.error("Error deleting comment:", error);
     }
   };
 
@@ -76,16 +76,16 @@ export default function CommentSection({ ticketId }) {
       setReplies({ ...replies, [commentId]: "" });
       fetchComments();
     } catch (error) {
-      console.error("Error Saving Reply:", error);
+      console.error("Error saving reply:", error);
     }
   };
   const handleDeleteReply = async (replyId) => {
-    if (!confirm("Delete this Reply?")) return;
+    if (!confirm("Delete this reply?")) return;
     try {
       await api.delete(`/deletereply/${replyId}`);
       fetchComments();
     } catch (error) {
-      console.error("Error deleting Reply:", error);
+      console.error("Error deleting reply:", error);
     }
   };
 

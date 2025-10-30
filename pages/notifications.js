@@ -5,7 +5,6 @@ import Sidebar from "../components/Sidebar";
 import Pagination from "../components/Pagination";
 import { getNotifications } from "@/helper/Notification";
 import { MdDelete, MdOutlineMarkEmailRead } from "react-icons/md";
-import { AiOutlineCheck } from "react-icons/ai";
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
 
 export default function Notifications() {
@@ -23,7 +22,7 @@ export default function Notifications() {
       setNotifications(res.data.notifications || []);
       setTotalPages(res.data.totalPages || 1);
     } catch (error) {
-      console.error("Error Fetching Notifications:", error);
+      console.error("Error fetching notifications:", error);
     } finally {
       setLoading(false);
     }
@@ -42,7 +41,7 @@ export default function Notifications() {
         )
       );
     } catch (error) {
-      console.error("Error Marking As Read:", error);
+      console.error("Error marking as read:", error);
     }
   };
 
@@ -51,7 +50,7 @@ export default function Notifications() {
       await api.delete(`/deletenotification/${id}`);
       setNotifications((prev) => prev.filter((notif) => notif.id !== id));
     } catch (error) {
-      console.error("Error Deleting Notification:", error);
+      console.error("Error deleting notification:", error);
     }
   };
 

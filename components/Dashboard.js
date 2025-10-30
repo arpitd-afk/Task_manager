@@ -41,7 +41,7 @@ export default function Dashboard() {
         const taskRes = await getTaskStatus();
         setTaskStatuses(taskRes.data.tasksByStatus || []);
       } catch (error) {
-        console.error("Error Fetching Dashboard Data:", error);
+        console.error("Error fetching dashboard data:", error);
       }
     };
     fetchData();

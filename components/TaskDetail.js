@@ -14,7 +14,7 @@ export default function TaskDetail() {
           const res = await api.get(`/gettask/${id}`);
           setTask(res.data);
         } catch (error) {
-          console.error("Error Fetching Task Details:", error);
+          console.error("Error fetching task details:", error);
         }
       };
       fetchTask();

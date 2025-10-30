@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import api from "../lib/api";
 import TaskForm from "./TaskForm";
 import Pagination from "./Pagination";
-import Link from "next/link";
 import Modal from "./Modal";
 import { IoIosAddCircle } from "react-icons/io";
 import { FaEye, FaRegEdit } from "react-icons/fa";
@@ -20,7 +19,7 @@ export default function TaskList({ ticketId }) {
       const res = await api.get(`/taskbyticket/${ticketId}`);
       setTasks(res.data.tasks || []);
     } catch (error) {
-      console.error("Error Fetching Tasks:", error);
+      console.error("Error fetching tasks:", error);
     }
   };
 
@@ -29,12 +28,12 @@ export default function TaskList({ ticketId }) {
   }, [ticketId]);
 
   const handleDelete = async (taskId) => {
-    if (confirm("Are You Sure?")) {
+    if (confirm("Are you sure?")) {
       try {
         await api.delete(`/deletetask/${taskId}`);
         fetchTasks();
       } catch (error) {
-        console.error("Error Deleting Task:", error);
+        console.error("Error deleting task:", error);
       }
     }
   };
@@ -131,7 +130,7 @@ export default function TaskList({ ticketId }) {
   );
 }
 {
-  /* <button
+  /*             <button
                   onClick={() => handleView(task.id)}
                   className="bg-purple-600 hover:bg-purple-700 rounded cursor-pointer text-white p-1.5 mr-2"
                 >
@@ -139,7 +138,7 @@ export default function TaskList({ ticketId }) {
                 </button> */
 }
 
-//  <Link
+//               <Link
 //                 href={`/tasks/edit/${task.id}`}
 //                 className="bg-blue-600 hover:bg-blue-700 rounded cursor-pointer text-white p-2.5 mr-2"
 //               >
@@ -150,4 +149,4 @@ export default function TaskList({ ticketId }) {
 //                 className="bg-green-600 hover:bg-green-500 text-white p-2 rounded mb-4"
 //               >
 //                 Add Task
-//  </Link>
+//               </Link>

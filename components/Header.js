@@ -29,7 +29,7 @@ export default function Header() {
           <span className="text-lg font-semibold mr-8">
             Welcome, {user.name || "User"}...
           </span>
-        )}{" "}
+        )}
         <nav className="flex space-x-4 items-center ">
           <button
             onClick={logout}

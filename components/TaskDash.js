@@ -10,7 +10,7 @@ export default function TaskList({ ticketId }) {
       const res = await getAllTasks();
       setTasks(res.data.tasks || []);
     } catch (error) {
-      console.error("Error Fetching Tasks:", error);
+      console.error("Error fetching tasks:", error);
     }
   };
   useEffect(() => {

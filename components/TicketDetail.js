@@ -16,7 +16,7 @@ export default function TicketDetail() {
           const res = await api.get(`/getticket/${id}`);
           setTicket(res.data);
         } catch (error) {
-          console.error("Error Fetching Ticket:", error);
+          console.error("Error fetching ticket:", error);
         }
       };
       fetchTicket();
