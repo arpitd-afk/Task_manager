@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import api from "../lib/api";
 import TaskForm from "./TaskForm";
 import Pagination from "./Pagination";
 import Modal from "./Modal";
@@ -7,30 +6,35 @@ import { IoIosAddCircle } from "react-icons/io";
 import { FaEye, FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useRouter } from "next/router";
+import { deleteTask, getTasksByTicket } from "@/helper/Tasks";
 
 export default function TaskList({ ticketId }) {
   const [tasks, setTasks] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const ITEMS_PER_PAGE = 5;
   const router = useRouter();
 
   const fetchTasks = async () => {
     try {
-      const res = await api.get(`/taskbyticket/${ticketId}`);
+      const res = await getTasksByTicket(ticketId);
       setTasks(res.data.tasks || []);
+      setTotalPages(res.data.totalPages || 1);
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
   };
 
   useEffect(() => {
-    fetchTasks();
-  }, [ticketId]);
+    fetchTasks(currentPage);
+  }, [ticketId, currentPage]);
 
-  const handleDelete = async (taskId) => {
+  const handleDelete = async (id) => {
     if (confirm("Are you sure?")) {
       try {
-        await api.delete(`/deletetask/${taskId}`);
+        await deleteTask(id);
         fetchTasks();
       } catch (error) {
         console.error("Error deleting task:", error);
@@ -97,10 +101,6 @@ export default function TaskList({ ticketId }) {
               <td className="p-2">{task.assigned_to}</td>
               <td className="p-2">{task.status}</td>
               <td className="p-2">
-                {/* <Link
-                  href={`/tasks/${task.id}`}
-                  className="text-white bg-purple-600 hover:bg-purple-700 p-1.5 cursor-pointer rounded mr-2"
-                ></Link> */}
                 <button
                   onClick={() => router.push(`/tasks/${task.id}`)}
                   className="text-white bg-purple-600 hover:bg-purple-700 p-1.5 cursor-pointer rounded mr-2"
@@ -125,28 +125,11 @@ export default function TaskList({ ticketId }) {
           ))}
         </tbody>
       </table>
-      <Pagination />
+      <Pagination
+        totalItems={totalPages * ITEMS_PER_PAGE}
+        itemsPerPage={ITEMS_PER_PAGE}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 }
-{
-  /*             <button
-                  onClick={() => handleView(task.id)}
-                  className="bg-purple-600 hover:bg-purple-700 rounded cursor-pointer text-white p-1.5 mr-2"
-                >
-                  View
-                </button> */
-}
-
-//               <Link
-//                 href={`/tasks/edit/${task.id}`}
-//                 className="bg-blue-600 hover:bg-blue-700 rounded cursor-pointer text-white p-2.5 mr-2"
-//               >
-//                 Edit
-//               </Link>
-//               <Link
-//                 href={`/tasks/create`}
-//                 className="bg-green-600 hover:bg-green-500 text-white p-2 rounded mb-4"
-//               >
-//                 Add Task
-//               </Link>

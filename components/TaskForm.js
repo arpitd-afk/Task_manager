@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import api from "../lib/api";
+import { addTask, updateTask } from "@/helper/Tasks";
 
 export default function TaskForm({ ticketId, task, onSuccess }) {
   const [formData, setFormData] = useState({
@@ -32,9 +32,9 @@ export default function TaskForm({ ticketId, task, onSuccess }) {
     try {
       const payload = { ...formData, ticket_id: ticketId };
       if (task) {
-        await api.put(`/updatetask/${task.id}`, payload);
+        await updateTask(task.id, payload);
       } else {
-        await api.post("/addtask", payload);
+        await addTask(payload);
       }
       onSuccess();
     } catch (error) {

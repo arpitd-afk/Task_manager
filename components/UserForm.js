@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import api from "../lib/api";
 import { useRouter } from "next/router";
+import { getUserByID, updateUser } from "@/helper/User";
+import Link from "next/link";
 
 export default function UserForm({ userId }) {
   const [formData, setFormData] = useState({
@@ -14,16 +15,16 @@ export default function UserForm({ userId }) {
     if (userId) {
       const fetchUser = async () => {
         try {
-          const res = await api.get(`/user/${userId}`);
+          const res = await getUserByID(userId);
           const user = res.data[0] || {};
           setFormData({
             name: user.name,
             email: user.email,
             role: user.role,
           });
-          console.log("Fetched User Data", user);
+          console.log("Fetched user data", user);
         } catch (error) {
-          console.error("Error Fetching User Data:", error);
+          console.error("Error fetching user data:", error);
         }
       };
       fetchUser();
@@ -37,18 +38,24 @@ export default function UserForm({ userId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.put(`/updateuser/${userId}`, formData);
+      await updateUser(userId, formData);
       router.push("/users");
     } catch (error) {
-      console.error("Error Saving User:", error);
+      console.error("Error saving user:", error);
     }
   };
 
   return (
-    <div className="bg-gray-100 py-20">
+    <div className="py-4">
+      <Link
+        href="/users"
+        className="p-2 bg-gray-500 text-white rounded md:ml-70"
+      >
+        Back
+      </Link>
       <form
         onSubmit={handleSubmit}
-        className="p-8 w-120 mx-auto bg-white rounded  md:ml-130"
+        className="p-8 w-120 mx-auto bg-gray-100 rounded mt-20  md:ml-130"
       >
         <h2 className="text-3xl text-gray-500 font-bold mb-4">EDIT USER</h2>
         <div className="mb-4">

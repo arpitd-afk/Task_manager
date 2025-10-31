@@ -1,13 +1,16 @@
 import api from "@/lib/api";
 
 export const getTicketSummary = async () => {
-  return await api.get("/tickets/summary");
+  const response = await api.get("/tickets/summary");
+  return response;
 };
 
 export const getTicketPriority = async () => {
-  return await api.get("/tickets/priority");
+  const response = await api.get("/tickets/priority");
+  return response;
 };
 
 export const getTaskStatus = async () => {
-  return await api.get("/tasks/status");
+  const response = await api.get("/tasks/status");
+  return response;
 };

@@ -9,6 +9,9 @@ import { useRouter } from "next/router";
 
 export default function UserList() {
   const [users, setUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const ITEMS_PER_PAGE = 10;
   const router = useRouter();
 
   useEffect(() => {
@@ -16,19 +19,20 @@ export default function UserList() {
       try {
         const res = await getAllUsers();
         setUsers(res.data.data || []);
+        setTotalPages(res.data.totalPages || 1);
       } catch (error) {
-        console.error("Error Fetching Users:", error);
+        console.error("Error fetching users:", error);
       }
     };
-    fetchUsers();
-  }, []);
+    fetchUsers(currentPage);
+  }, [currentPage]);
   const handleDelete = async (id) => {
-    if (confirm("Are You Sure?")) {
+    if (confirm("Are you sure?")) {
       try {
-        await deleteUser();
+        await deleteUser(id);
         setUsers(users.filter((user) => user.id !== id));
       } catch (error) {
-        console.error("Error Deleting User:", error);
+        console.error("Error deleting user:", error);
       }
     }
   };
@@ -62,12 +66,6 @@ export default function UserList() {
               <td className="p-2">{user.role}</td>
 
               <td className="p-2">
-                {/* <Link
-                  href={`/users/${user.id}`}
-                  className="bg-blue-600 hover:bg-blue-700 text-white p-2 cursor-pointer rounded mr-2"
-                >
-                  Edit
-                </Link> */}
                 <button
                   onClick={() => router.push(`/users/${user.id}`)}
                   className="text-white text-md bg-blue-500 p-1.5 cursor-pointer rounded hover:bg-blue-600 mr-2"
@@ -85,7 +83,11 @@ export default function UserList() {
           ))}
         </tbody>
       </table>
-      <Pagination />
+      <Pagination
+        totalItems={totalPages * ITEMS_PER_PAGE}
+        itemsPerPage={ITEMS_PER_PAGE}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 }

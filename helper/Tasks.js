@@ -1,25 +1,31 @@
 import api from "@/lib/api";
 
 export const getAllTasks = async () => {
-  return await api.get("/getalltasks");
+  const response = await api.get("/getalltasks");
+  return response;
 };
 
 export const getTaskById = async (id) => {
-  return await api.get(`/gettask/${id}`);
+  const response = await api.get(`/gettask/${id}`);
+  return response;
 };
 
-export const getTasksByTicket = async (ticket_id) => {
-  return await api.get(`/taskbyticket/${ticket_id}`);
+export const getTasksByTicket = async (ticketId) => {
+  const response = await api.get(`/taskbyticket/${ticketId}`);
+  return response;
 };
 
-export const addTask = async (data) => {
-  return await api.post("/addtask", data);
+export const addTask = async (payload) => {
+  const response = await api.post("/addtask", payload);
+  return response;
 };
 
-export const updateTask = async (id, data) => {
-  return await api.put(`/updatetask/${id}`, data);
+export const updateTask = async (id, payload) => {
+  const response = await api.put(`/updatetask/${id}`, payload);
+  return response;
 };
 
 export const deleteTask = async (id) => {
-  return await api.delete(`/deletetask/${id}`);
+  const response = await api.delete(`/deletetask/${id}`);
+  return response;
 };

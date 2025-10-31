@@ -1,21 +1,26 @@
 import api from "@/lib/api";
 
 export const getAllTickets = async () => {
-  return await api.get("/getalltickets");
+  const response = await api.get("/getalltickets");
+  return response;
 };
 
-export const addTicket = async (data) => {
-  return await api.post("/addticket", data);
+export const addTicket = async (formData) => {
+  const response = await api.post("/addticket", formData);
+  return response;
 };
 
-export const getTicketByID = async () => {
-  return await api.get(`/getticket/${id}`);
+export const getTicketByID = async (ticketId) => {
+  const response = await api.get(`/getticket/${ticketId}`);
+  return response;
 };
 
-export const updateTicket = async (id, data) => {
-  return await api.put(`/updateticket/${id}`, data);
+export const updateTicket = async (ticketId, formData) => {
+  const response = await api.put(`/updateticket/${ticketId}`, formData);
+  return response;
 };
 
 export const deleteTicket = async (id) => {
-  return await api.delete(`/deleteticket/${id}`);
+  const response = await api.delete(`/deleteticket/${id}`);
+  return response;
 };

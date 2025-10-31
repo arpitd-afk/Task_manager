@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import api from "../../lib/api";
 import Link from "next/link";
+import { signupUser } from "@/helper/Auth";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -16,10 +16,10 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/signup", formData);
+      await signupUser(formData);
       router.push("/auth/login");
     } catch (err) {
-      setError(err.response?.data?.statusmessage || "Signup failed");
+      setError(err.response?.data?.statusmessage || "Signup Failed");
     }
   };
 

@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
-import api from "../lib/api";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Pagination from "../components/Pagination";
-import { getNotifications } from "@/helper/Notification";
+import {
+  deleteNotifications,
+  getNotifications,
+  updateNotifications,
+} from "@/helper/Notification";
 import { MdDelete, MdOutlineMarkEmailRead } from "react-icons/md";
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
 
@@ -34,7 +37,7 @@ export default function Notifications() {
 
   const handleMarkRead = async (id) => {
     try {
-      await api.put(`/updatenotification/${id}`);
+      await updateNotifications(id);
       setNotifications((prev) =>
         prev.map((notif) =>
           notif.id === id ? { ...notif, is_read: true } : notif
@@ -47,7 +50,7 @@ export default function Notifications() {
 
   const handleDelete = async (id) => {
     try {
-      await api.delete(`/deletenotification/${id}`);
+      await deleteNotifications(id);
       setNotifications((prev) => prev.filter((notif) => notif.id !== id));
     } catch (error) {
       console.error("Error deleting notification:", error);

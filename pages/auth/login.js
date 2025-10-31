@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import api from "../../lib/api";
 import { useAuth } from "../../lib/auth";
 import Link from "next/link";
+import { loginUser } from "@/helper/Auth";
 
 export default function Login() {
   const { login } = useAuth();
@@ -13,7 +13,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post("/login", formData);
+      const response = await loginUser(formData);
       login(response.data.token, response.data.user);
       router.push("/dashboard");
     } catch (err) {

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import api from "../lib/api";
 import TaskList from "./TaskList";
 import CommentSection from "./CommentSection";
+import { getTicketByID } from "@/helper/Ticket";
+import Link from "next/link";
 
 export default function TicketDetail() {
   const router = useRouter();
@@ -13,7 +14,7 @@ export default function TicketDetail() {
     if (id) {
       const fetchTicket = async () => {
         try {
-          const res = await api.get(`/getticket/${id}`);
+          const res = await getTicketByID(id);
           setTicket(res.data);
         } catch (error) {
           console.error("Error fetching ticket:", error);
@@ -26,7 +27,10 @@ export default function TicketDetail() {
   if (!ticket) return <div className="p-4 ml-64">Loading...</div>;
 
   return (
-    <div className="p-4 ml-64">
+    <div className="ml-64">
+      <Link href="/tickets" className="p-2  bg-gray-500 text-white rounded ">
+        Back
+      </Link>
       <h2 className="text-3xl font-bold text-gray-500 mb-4">TICKET DETAILS</h2>
       <div className="bg-white w-full text-gray-800 text-sm p-6 rounded-lg shadow-md border border-gray-100 mb-6 hover:shadow-lg transition-shadow duration-300">
         <div className="mb-4 border-b border-gray-200 pb-3">

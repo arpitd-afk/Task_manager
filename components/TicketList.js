@@ -1,35 +1,39 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import api from "../lib/api";
 import Pagination from "./Pagination";
 import { useRouter } from "next/router";
 import { IoIosAddCircle } from "react-icons/io";
 import { FaEye, FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { deleteTicket, getAllTickets } from "@/helper/Ticket";
 
 export default function TicketList() {
   const [tickets, setTickets] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const ITEMS_PER_PAGE = 10;
   const router = useRouter();
 
   useEffect(() => {
     const fetchTickets = async () => {
       try {
-        const response = await api.get("/getalltickets");
+        const response = await getAllTickets();
         setTickets(response.data.tickets || []);
+        setTotalPages(response.data.totalPages || 1);
       } catch (error) {
         console.error("Error Fetching Tickets:", error);
       }
     };
-    fetchTickets();
-  }, []);
+    fetchTickets(currentPage);
+  }, [currentPage]);
 
   const handleDelete = async (id) => {
     if (confirm("Are You Sure?")) {
       try {
-        await api.delete(`/deleteticket/${id}`);
+        await deleteTicket(id);
         setTickets(tickets.filter((ticket) => ticket.id !== id));
       } catch (error) {
-        console.error("Error Deleting Ticket:", error);
+        console.log("Error Deleting Ticket:", error);
       }
     }
   };
@@ -66,12 +70,6 @@ export default function TicketList() {
               <td className="p-2">{ticket.status}</td>
               <td className="p-2">{ticket.priority}</td>
               <td className="p-2">
-                {/* <Link
-                  href={`/tickets/${ticket.id}`}
-                  className="text-white bg-blue-600 hover:bg-blue-700 p-2 cursor-pointer rounded mr-4"
-                >
-                  View
-                </Link> */}
                 <button
                   onClick={() => router.push(`/tickets/${ticket.id}`)}
                   className="text-white bg-purple-600 hover:bg-purple-700 p-1.5 cursor-pointer rounded mr-2"
@@ -95,7 +93,11 @@ export default function TicketList() {
           ))}
         </tbody>
       </table>
-      <Pagination />
+      <Pagination
+        totalItems={totalPages * ITEMS_PER_PAGE}
+        itemsPerPage={ITEMS_PER_PAGE}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 }

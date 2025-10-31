@@ -4,18 +4,22 @@ import { getAllTasks } from "@/helper/Tasks";
 
 export default function TaskList({ ticketId }) {
   const [tasks, setTasks] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const ITEMS_PER_PAGE = 7;
 
   const fetchTasks = async () => {
     try {
       const res = await getAllTasks();
       setTasks(res.data.tasks || []);
+      setTotalPages(res.data.totalPages || 1);
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
   };
   useEffect(() => {
-    fetchTasks();
-  }, [ticketId]);
+    fetchTasks(currentPage);
+  }, [ticketId, currentPage]);
 
   return (
     <div className="mb-8 ml-64">
@@ -51,7 +55,11 @@ export default function TaskList({ ticketId }) {
           ))}
         </tbody>
       </table>
-      <Pagination />
+      <Pagination
+        totalItems={totalPages * ITEMS_PER_PAGE}
+        itemsPerPage={ITEMS_PER_PAGE}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 }

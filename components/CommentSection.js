@@ -1,7 +1,16 @@
 import { useEffect, useState } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import api from "../lib/api";
+import {
+  addcomment,
+  addcommentReply,
+  deleteComment,
+  deleteCommentReply,
+  getCommentByTicket,
+  getCommentReply,
+  updateComment,
+  updateCommentReply,
+} from "@/helper/Comment";
 
 export default function CommentSection({ ticketId }) {
   const [comments, setComments] = useState([]);
@@ -11,13 +20,11 @@ export default function CommentSection({ ticketId }) {
   const [editingReply, setEditingReply] = useState({});
   const fetchComments = async () => {
     try {
-      const res = await api.get(`/getcommbyticket/${ticketId}`);
+      const res = await getCommentByTicket(ticketId);
       const commentsData = res.data.comments || [];
       const updatedComments = await Promise.all(
         commentsData.map(async (comment) => {
-          const repliesRes = await api.get(
-            `/getrepliesbycomment/${comment.id}`
-          );
+          const repliesRes = await getCommentReply(comment.id);
           return { ...comment, replies: repliesRes.data.replies || [] };
         })
       );
@@ -34,12 +41,10 @@ export default function CommentSection({ ticketId }) {
     try {
       if (!newComment.trim()) return;
       if (editingCommentId) {
-        await api.put(`/editcomment/${editingCommentId}`, {
-          comment_text: newComment,
-        });
+        await updateComment(editingCommentId, { comment_text: newComment });
         setEditingCommentId(null);
       } else {
-        await api.post("/addcomment", {
+        await addcomment({
           ticket_id: ticketId,
           comment_text: newComment,
         });
@@ -54,7 +59,7 @@ export default function CommentSection({ ticketId }) {
   const handleDeleteComment = async (commentId) => {
     if (!confirm("Delete this comment?")) return;
     try {
-      await api.delete(`/deletecomment/${commentId}`);
+      await deleteComment(commentId);
       fetchComments();
     } catch (error) {
       console.error("Error deleting comment:", error);
@@ -66,12 +71,12 @@ export default function CommentSection({ ticketId }) {
       const replyText = replies[commentId]?.trim();
       if (!replyText) return;
       if (editingReply[commentId]) {
-        await api.put(`/editreply/${editingReply[commentId]}`, {
+        await updateCommentReply(editingReply[commentId], {
           reply_text: replyText,
         });
         setEditingReply({ ...editingReply, [commentId]: null });
       } else {
-        await api.post(`/replycomment/${commentId}`, { reply_text: replyText });
+        await addcommentReply(commentId, { reply_text: replyText });
       }
       setReplies({ ...replies, [commentId]: "" });
       fetchComments();
@@ -82,7 +87,7 @@ export default function CommentSection({ ticketId }) {
   const handleDeleteReply = async (replyId) => {
     if (!confirm("Delete this reply?")) return;
     try {
-      await api.delete(`/deletereply/${replyId}`);
+      await deleteCommentReply(replyId);
       fetchComments();
     } catch (error) {
       console.error("Error deleting reply:", error);

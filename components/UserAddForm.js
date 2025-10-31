@@ -1,6 +1,7 @@
 import { useState } from "react";
-import api from "../lib/api";
 import { useRouter } from "next/router";
+import { signupUser } from "@/helper/Auth";
+import Link from "next/link";
 
 export default function UserAddForm() {
   const [formData, setFormData] = useState({
@@ -18,18 +19,24 @@ export default function UserAddForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/signup", formData);
+      await signupUser(formData);
       router.push("/users");
     } catch (error) {
-      console.error("Error Adding User:", error);
+      console.error("Error adding user:", error);
     }
   };
 
   return (
-    <div className="bg-gray-100 py-20">
+    <div className="py-4">
+      <Link
+        href="/users"
+        className="p-2 bg-gray-500 text-white rounded md:ml-70"
+      >
+        Back
+      </Link>
       <form
         onSubmit={handleSubmit}
-        className="p-8 w-120 mx-auto bg-white rounded  md:ml-130"
+        className="p-8 w-120 mx-auto bg-gray-100 rounded  md:ml-130"
       >
         <h2 className="text-3xl text-gray-500 font-bold mb-4">CREATE USER</h2>
         <div className="mb-4">

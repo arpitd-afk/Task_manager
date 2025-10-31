@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import api from "../lib/api";
 import { useRouter } from "next/router";
+import { addTicket, getTicketByID, updateTicket } from "@/helper/Ticket";
+import Link from "next/link";
 
 export default function TicketForm({ ticketId }) {
   const [formData, setFormData] = useState({
@@ -15,7 +16,7 @@ export default function TicketForm({ ticketId }) {
     if (ticketId) {
       const fetchTicket = async () => {
         try {
-          const res = await api.get(`/getticket/${ticketId}`);
+          const res = await getTicketByID(ticketId);
           setFormData({
             title: res.data.title,
             description: res.data.description,
@@ -23,7 +24,7 @@ export default function TicketForm({ ticketId }) {
             status: res.data.status,
           });
         } catch (error) {
-          console.error("Error Fetching Ticket:", error);
+          console.error("Error fetching ticket:", error);
         }
       };
       fetchTicket();
@@ -38,21 +39,27 @@ export default function TicketForm({ ticketId }) {
     e.preventDefault();
     try {
       if (ticketId) {
-        await api.put(`/updateticket/${ticketId}`, formData);
+        await updateTicket(ticketId, formData);
       } else {
-        await api.post("/addticket", formData);
+        await addTicket(formData);
       }
       router.push("/tickets");
     } catch (error) {
-      console.error("Error Saving Ticket:", error);
+      console.error("Error saving ticket:", error);
     }
   };
 
   return (
-    <div className="bg-gray-100 py-20">
+    <div className="py-4">
+      <Link
+        href="/tickets"
+        className="p-2 bg-gray-500 text-white rounded md:ml-70"
+      >
+        Back
+      </Link>
       <form
         onSubmit={handleSubmit}
-        className="p-8 w-120 mx-auto bg-white rounded  md:ml-130"
+        className="p-8 w-120 mx-auto bg-gray-100  rounded  md:ml-130"
       >
         <h2 className="text-3xl font-bold text-gray-500 mb-4">
           {ticketId ? "EDIT" : "CREATE"} TICKET
@@ -64,7 +71,7 @@ export default function TicketForm({ ticketId }) {
             name="title"
             value={formData.title}
             onChange={handleChange}
-            className="w-full p-2 border text-gray-700"
+            className="w-full p-2 border bg-white text-gray-700"
             required
           />
         </div>
@@ -74,7 +81,7 @@ export default function TicketForm({ ticketId }) {
             name="description"
             value={formData.description}
             onChange={handleChange}
-            className="w-full p-2 border text-gray-700"
+            className="w-full p-2 border bg-white text-gray-700"
             required
           />
         </div>
@@ -84,7 +91,7 @@ export default function TicketForm({ ticketId }) {
             name="priority"
             value={formData.priority}
             onChange={handleChange}
-            className="w-full p-2 border text-gray-700"
+            className="w-full p-2 border bg-white text-gray-700"
           >
             <option value="Low">Low</option>
             <option value="Medium">Medium</option>
@@ -97,7 +104,7 @@ export default function TicketForm({ ticketId }) {
             name="status"
             value={formData.status}
             onChange={handleChange}
-            className="w-full p-2 border text-gray-700"
+            className="w-full p-2 bg-white border text-gray-700"
           >
             <option value="Open">Open</option>
             <option value="In Progress">In Progress</option>
