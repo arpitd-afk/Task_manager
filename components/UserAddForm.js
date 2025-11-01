@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { signupUser } from "@/helper/Auth";
-import Link from "next/link";
+import { IoIosArrowRoundBack } from "react-icons/io";
 
 export default function UserAddForm() {
   const [formData, setFormData] = useState({
@@ -27,16 +27,16 @@ export default function UserAddForm() {
   };
 
   return (
-    <div className="py-4">
-      <Link
-        href="/users"
-        className="p-2 bg-gray-500 text-white rounded md:ml-70"
+    <div className="md:ml-66">
+      <button
+        onClick={() => router.push("/users")}
+        className="justify-start text-gray-700 text-3xl cursor-pointer rounded "
       >
-        Back
-      </Link>
+        <IoIosArrowRoundBack />
+      </button>
       <form
         onSubmit={handleSubmit}
-        className="p-8 w-120 mx-auto bg-gray-100 rounded  md:ml-130"
+        className="p-8 w-120 mx-auto bg-gray-100 rounded"
       >
         <h2 className="text-3xl text-gray-500 font-bold mb-4">CREATE USER</h2>
         <div className="mb-4">
@@ -46,7 +46,7 @@ export default function UserAddForm() {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className="w-full p-2 text-gray-700 border rounded"
+            className="w-full p-2 text-gray-700 border border-gray-300 bg-white rounded"
             required
           />
         </div>
@@ -57,7 +57,7 @@ export default function UserAddForm() {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full p-2 text-gray-700 border rounded"
+            className="w-full p-2 text-gray-700 border border-gray-300 bg-white rounded"
             required
           />
         </div>
@@ -67,7 +67,7 @@ export default function UserAddForm() {
             name="role"
             value={formData.role}
             onChange={handleChange}
-            className="w-full p-2 text-gray-700 border rounded"
+            className="w-full p-2 text-gray-700 border rounded border-gray-300 bg-white"
             required
           >
             <option value="Admin">Admin</option>
@@ -82,12 +82,12 @@ export default function UserAddForm() {
             name="password"
             value={formData.password}
             onChange={handleChange}
-            className="w-full p-2 text-gray-700 border rounded"
+            className="w-full p-2 text-gray-700 border rounded border-gray-300 bg-white"
           />
         </div>
         <button
           type="submit"
-          className="bg-blue-600 text-white p-2.5 w-30 rounded hover:bg-blue-700 cursor-pointer"
+          className="bg-blue-600 text-white p-2.5 w-20 rounded hover:bg-blue-700 cursor-pointer"
         >
           Save
         </button>

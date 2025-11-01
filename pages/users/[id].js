@@ -12,7 +12,9 @@ export default function EditUserPage() {
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Header />
-        <UserForm userId={id} />
+        <main className="p-4">
+          <UserForm userId={id} />
+        </main>
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import Link from "next/link";
 import Pagination from "./Pagination";
 import { deleteUser, getAllUsers } from "@/helper/User";
 import { IoIosAddCircle } from "react-icons/io";
-import { FaRegEdit } from "react-icons/fa";
+import { FaEye, FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useRouter } from "next/router";
 
@@ -36,6 +36,12 @@ export default function UserList() {
       }
     }
   };
+  if (!users)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Loading...
+      </div>
+    );
   return (
     <div className="p-4 ml-64">
       <div className="flex items-center justify-between mb-4">
@@ -71,6 +77,12 @@ export default function UserList() {
                   className="text-white text-md bg-blue-500 p-1.5 cursor-pointer rounded hover:bg-blue-600 mr-2"
                 >
                   <FaRegEdit title="Edit User" />
+                </button>
+                <button
+                  onClick={() => router.push(`/users/view/${user.id}`)}
+                  className="text-white bg-purple-600 hover:bg-purple-700 p-1.5 cursor-pointer rounded mr-2"
+                >
+                  <FaEye title="View Ticket" />
                 </button>
                 <button
                   onClick={() => handleDelete(user.id)}

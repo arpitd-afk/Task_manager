@@ -63,7 +63,7 @@ export default function Dashboard() {
   }));
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 md:ml-64 min-h-screen bg-gray-50">
+    <div className="md:ml-66">
       <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-500 mb-6 md:mb-8">
         {getUserRole() || "User"} - Dashboard
       </h1>
@@ -123,7 +123,7 @@ export default function Dashboard() {
           <h2 className="text-xl md:text-2xl font-extrabold text-gray-700 mb-4">
             LINE CHART - TICKET SUMMARY
           </h2>
-          <div className="bg-white p-4 rounded-xl shadow-sm">
+          <div className="bg-white p-4 rounded-xl">
             <ResponsiveContainer width="100%" height={300}>
               <LineChart
                 data={lineChartData}
@@ -150,7 +150,7 @@ export default function Dashboard() {
           <h2 className="text-xl md:text-2xl font-extrabold text-gray-700 mb-4">
             BAR CHART - TICKET PRIORITY
           </h2>
-          <div className="bg-white p-4 rounded-xl shadow-sm">
+          <div className="bg-white p-4 rounded-xl">
             <ResponsiveContainer width="100%" height={300}>
               <BarChart
                 data={barChartData}
@@ -172,7 +172,7 @@ export default function Dashboard() {
           <h2 className="text-xl md:text-2xl font-extrabold text-gray-700 mb-4">
             PIE CHART - TASK STATUS
           </h2>
-          <div className="bg-white p-4 rounded-xl shadow-sm">
+          <div className="bg-white p-4 rounded-xl">
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie

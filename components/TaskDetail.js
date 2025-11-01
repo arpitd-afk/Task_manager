@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { getTaskById } from "@/helper/Tasks";
-import Link from "next/link";
+import { IoIosArrowRoundBack } from "react-icons/io";
 
 export default function TaskDetail() {
   const router = useRouter();
@@ -30,15 +30,15 @@ export default function TaskDetail() {
     );
 
   return (
-    <div className="py-2">
-      <Link
-        href="/tickets"
-        className="p-2 justify-start bg-gray-500 text-white rounded md:ml-68"
+    <div className="md:ml-66">
+      <button
+        onClick={() => router.push("/tickets")}
+        className="justify-start text-gray-700 text-3xl cursor-pointer rounded"
       >
-        Back
-      </Link>
-      <div className="flex items-center justify-center md:ml-80 p-4">
-        <div className="max-w-2xl w-full bg-white p-6 py-20  rounded-lg shadow-lg">
+        <IoIosArrowRoundBack />
+      </button>
+      <div className="flex items-center justify-center p-4">
+        <div className="max-w-4xl bg-white p-6 py-10  rounded-lg shadow-lg">
           <h2 className="text-3xl font-bold text-gray-500 mb-6 text-center underline">
             TASK DETAILS
           </h2>

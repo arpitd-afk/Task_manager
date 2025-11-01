@@ -8,7 +8,7 @@ export default function CreateTicketPage() {
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Header />
-        <main>
+        <main className="p-4">
           <TicketForm />
         </main>
       </div>

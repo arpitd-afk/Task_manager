@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { addTicket, getTicketByID, updateTicket } from "@/helper/Ticket";
-import Link from "next/link";
+import { IoIosArrowRoundBack } from "react-icons/io";
 
 export default function TicketForm({ ticketId }) {
   const [formData, setFormData] = useState({
@@ -50,16 +50,16 @@ export default function TicketForm({ ticketId }) {
   };
 
   return (
-    <div className="py-4">
-      <Link
-        href="/tickets"
-        className="p-2 bg-gray-500 text-white rounded md:ml-70"
+    <div className="md:ml-66">
+      <button
+        onClick={() => router.push("/tickets")}
+        className="justify-start text-gray-700 text-3xl cursor-pointer rounded "
       >
-        Back
-      </Link>
+        <IoIosArrowRoundBack />
+      </button>
       <form
         onSubmit={handleSubmit}
-        className="p-8 w-120 mx-auto bg-gray-100  rounded  md:ml-130"
+        className="p-8 w-120 mx-auto bg-gray-100  rounded"
       >
         <h2 className="text-3xl font-bold text-gray-500 mb-4">
           {ticketId ? "EDIT" : "CREATE"} TICKET

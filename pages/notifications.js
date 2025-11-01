@@ -14,20 +14,15 @@ export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(false);
-
   const ITEMS_PER_PAGE = 10;
 
-  const fetchNotifications = async (page = 1) => {
-    setLoading(true);
+  const fetchNotifications = async () => {
     try {
       const res = await getNotifications();
       setNotifications(res.data.notifications || []);
       setTotalPages(res.data.totalPages || 1);
     } catch (error) {
       console.error("Error fetching notifications:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -57,18 +52,23 @@ export default function Notifications() {
     }
   };
 
+  if (!notifications)
+    return (
+      <div className="flex items-center p-4 ml-64 justify-center h-screen">
+        Loading...
+      </div>
+    );
+
   return (
     <div className="flex min-h-screen">
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Header />
-        <div className="p-4 ml-64">
-          <h2 className="text-3xl text-gray-500 font-bold mb-4">
-            NOTIFICATIONS
-          </h2>
-          {loading ? (
-            <p>Loading...</p>
-          ) : (
+        <main className="p-4">
+          <div className="ml-66">
+            <h2 className="text-3xl text-gray-500 font-bold mb-4">
+              NOTIFICATIONS
+            </h2>
             <ul className="space-y-4">
               {notifications.map((notif) => (
                 <li
@@ -109,13 +109,13 @@ export default function Notifications() {
                 </li>
               ))}
             </ul>
-          )}
-          <Pagination
-            totalItems={totalPages * ITEMS_PER_PAGE}
-            itemsPerPage={ITEMS_PER_PAGE}
-            onPageChange={setCurrentPage}
-          />
-        </div>
+            <Pagination
+              totalItems={totalPages * ITEMS_PER_PAGE}
+              itemsPerPage={ITEMS_PER_PAGE}
+              onPageChange={setCurrentPage}
+            />
+          </div>
+        </main>
       </div>
     </div>
   );

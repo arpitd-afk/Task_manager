@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import TaskList from "./TaskList";
 import CommentSection from "./CommentSection";
 import { getTicketByID } from "@/helper/Ticket";
-import Link from "next/link";
+import { IoIosArrowRoundBack } from "react-icons/io";
 
 export default function TicketDetail() {
   const router = useRouter();
@@ -24,13 +24,21 @@ export default function TicketDetail() {
     }
   }, [id]);
 
-  if (!ticket) return <div className="p-4 ml-64">Loading...</div>;
+  if (!ticket)
+    return (
+      <div className="flex items-center p-4 ml-64 justify-center h-screen">
+        Loading...
+      </div>
+    );
 
   return (
-    <div className="ml-64">
-      <Link href="/tickets" className="p-2  bg-gray-500 text-white rounded ">
-        Back
-      </Link>
+    <div className="md:ml-66">
+      <button
+        onClick={() => router.push("/tickets")}
+        className="justify-start text-gray-700 text-3xl cursor-pointer rounded"
+      >
+        <IoIosArrowRoundBack />
+      </button>
       <h2 className="text-3xl font-bold text-gray-500 mb-4">TICKET DETAILS</h2>
       <div className="bg-white w-full text-gray-800 text-sm p-6 rounded-lg shadow-md border border-gray-100 mb-6 hover:shadow-lg transition-shadow duration-300">
         <div className="mb-4 border-b border-gray-200 pb-3">

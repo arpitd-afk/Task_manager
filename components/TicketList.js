@@ -21,25 +21,32 @@ export default function TicketList() {
         setTickets(response.data.tickets || []);
         setTotalPages(response.data.totalPages || 1);
       } catch (error) {
-        console.error("Error Fetching Tickets:", error);
+        console.error("Error fetching tickets:", error);
       }
     };
     fetchTickets(currentPage);
   }, [currentPage]);
 
   const handleDelete = async (id) => {
-    if (confirm("Are You Sure?")) {
+    if (confirm("Are you sure?")) {
       try {
         await deleteTicket(id);
         setTickets(tickets.filter((ticket) => ticket.id !== id));
       } catch (error) {
-        console.log("Error Deleting Ticket:", error);
+        console.log("Error deleting ticket:", error);
       }
     }
   };
 
+  if (!tickets)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Loading...
+      </div>
+    );
+
   return (
-    <div className="p-2 ml-64">
+    <div className="ml-64">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-3xl font-bold mb-4 text-gray-500">TICKETS</h2>
         <Link

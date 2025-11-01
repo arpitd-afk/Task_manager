@@ -26,10 +26,10 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-200">
+    <div className="min-h-screen flex items-center justify-center">
       <form
         onSubmit={handleSubmit}
-        className="p-6 bg-white rounded shadow-md w-96"
+        className="p-6 bg-white rounded shadow-xl w-96"
       >
         <h2 className="text-3xl text-center text-gray-500 font-bold mb-4">
           LOGIN

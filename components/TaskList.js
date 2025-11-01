@@ -53,6 +53,13 @@ export default function TaskList({ ticketId }) {
     fetchTasks();
   };
 
+  if (!tasks)
+    return (
+      <div className="flex items-center p-4 ml-64 justify-center h-screen">
+        Loading...
+      </div>
+    );
+
   return (
     <div className="mb-8 pt-10">
       <div className="flex items-center justify-between mb-4">

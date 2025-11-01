@@ -117,22 +117,21 @@ export default function CommentSection({ ticketId }) {
   return (
     <div className="p-4">
       <h3 className="text-3xl text-gray-500 font-bold mb-3">COMMENTS:</h3>
-
       {/* Comment input section*/}
       <div className="mb-4">
-        <textarea
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          className="w-full p-2 border rounded"
-          placeholder="Add a comment..."
-          rows="3"
-        />
-        <div className="mt-2 flex gap-2">
+        <div className="flex gap-2">
+          <textarea
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            className="h-10 w-98 p-1.5 pl-3 border border-gray-300 rounded"
+            placeholder="Add a comment..."
+            rows="3"
+          />
           <button
             onClick={handleSaveComment}
             className="bg-blue-500 cursor-pointer text-white px-4 py-2 rounded hover:bg-blue-600"
           >
-            {editingCommentId ? "Update Comment" : "Add Comment"}
+            {editingCommentId ? "Edit" : "Add"}
           </button>
           {editingCommentId && (
             <button
@@ -148,7 +147,7 @@ export default function CommentSection({ ticketId }) {
       {/* Comment list section*/}
       <div className="space-y-4">
         {comments.map((comment) => (
-          <div key={comment.id} className="bg-gray-100 p-4 rounded">
+          <div key={comment.id} className="bg-gray-100 w-138 p-4 rounded">
             <p className="text-sm">{comment.comment_text}</p>
             <p className="text-xs text-gray-600">
               By {comment.user_name} ({comment.role}) at{" "}
@@ -170,9 +169,12 @@ export default function CommentSection({ ticketId }) {
             </div>
 
             {/* Replies section */}
-            <div className="ml-4 mt-3 space-y-2">
+            <div className="ml-4 mt-3 space-y-2 w-120">
               {comment.replies.map((reply) => (
-                <div key={reply.id} className="bg-white p-2 rounded">
+                <div
+                  key={reply.id}
+                  className="bg-white border border-gray-300 p-2 rounded"
+                >
                   <p className="text-sm">{reply.reply_text}</p>
                   <p className="text-xs text-gray-600">
                     By {reply.user_name} ({reply.role}) at{" "}
@@ -201,7 +203,7 @@ export default function CommentSection({ ticketId }) {
                 onChange={(e) =>
                   setReplies({ ...replies, [comment.id]: e.target.value })
                 }
-                className="w-full p-2 border rounded mt-2"
+                className="w-full p-1.5 h-10 border bg-white border-gray-300 rounded mt-2"
                 placeholder="Add a reply..."
                 rows="2"
               />
@@ -210,7 +212,7 @@ export default function CommentSection({ ticketId }) {
                   onClick={() => handleSaveReply(comment.id)}
                   className="bg-green-500 text-white px-4 py-1 rounded cursor-pointer hover:bg-green-600"
                 >
-                  {editingReply[comment.id] ? "Update Reply" : "Add Reply"}
+                  {editingReply[comment.id] ? "Edit Reply" : "Reply"}
                 </button>
                 {editingReply[comment.id] && (
                   <button
