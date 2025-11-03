@@ -17,7 +17,7 @@ export default function TicketDetail() {
           const res = await getTicketByID(id);
           setTicket(res.data);
         } catch (error) {
-          console.error("Error fetching ticket:", error);
+          console.error("Error fetching Ticket:", error);
         }
       };
       fetchTicket();
@@ -32,7 +32,7 @@ export default function TicketDetail() {
     );
 
   return (
-    <div className="md:ml-66">
+    <div className="ml-66">
       <button
         onClick={() => router.push("/tickets")}
         className="justify-start text-gray-700 text-3xl cursor-pointer rounded"

@@ -38,7 +38,7 @@ export default function TaskForm({ ticketId, task, onSuccess }) {
       }
       onSuccess();
     } catch (error) {
-      console.error("Error saving task:", error);
+      console.error("Error saving Task:", error);
     } finally {
       setIsLoading(false);
     }

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
-import Pagination from "../components/Pagination";
 import {
   deleteNotifications,
   getNotifications,
@@ -12,23 +11,19 @@ import { IoCheckmarkDoneSharp } from "react-icons/io5";
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const ITEMS_PER_PAGE = 10;
 
   const fetchNotifications = async () => {
     try {
       const res = await getNotifications();
       setNotifications(res.data.notifications || []);
-      setTotalPages(res.data.totalPages || 1);
     } catch (error) {
-      console.error("Error fetching notifications:", error);
+      console.error("Error fetching Notifications:", error);
     }
   };
 
   useEffect(() => {
-    fetchNotifications(currentPage);
-  }, [currentPage]);
+    fetchNotifications();
+  }, []);
 
   const handleMarkRead = async (id) => {
     try {
@@ -39,16 +34,18 @@ export default function Notifications() {
         )
       );
     } catch (error) {
-      console.error("Error marking as read:", error);
+      console.error("Error marking Notification as read:", error);
     }
   };
 
   const handleDelete = async (id) => {
-    try {
-      await deleteNotifications(id);
-      setNotifications((prev) => prev.filter((notif) => notif.id !== id));
-    } catch (error) {
-      console.error("Error deleting notification:", error);
+    if (confirm("Are you sure to delete the Notification?")) {
+      try {
+        await deleteNotifications(id);
+        setNotifications((prev) => prev.filter((notif) => notif.id !== id));
+      } catch (error) {
+        console.error("Error deleting Notification:", error);
+      }
     }
   };
 
@@ -109,11 +106,6 @@ export default function Notifications() {
                 </li>
               ))}
             </ul>
-            <Pagination
-              totalItems={totalPages * ITEMS_PER_PAGE}
-              itemsPerPage={ITEMS_PER_PAGE}
-              onPageChange={setCurrentPage}
-            />
           </div>
         </main>
       </div>

@@ -21,18 +21,19 @@ export default function UserList() {
         setUsers(res.data.data || []);
         setTotalPages(res.data.totalPages || 1);
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching Users:", error);
       }
     };
     fetchUsers(currentPage);
   }, [currentPage]);
+
   const handleDelete = async (id) => {
-    if (confirm("Are you sure?")) {
+    if (confirm("Are you sure to delete this User?")) {
       try {
         await deleteUser(id);
         setUsers(users.filter((user) => user.id !== id));
       } catch (error) {
-        console.error("Error deleting user:", error);
+        console.error("Error deleting User:", error);
       }
     }
   };
@@ -43,7 +44,7 @@ export default function UserList() {
       </div>
     );
   return (
-    <div className="p-4 ml-64">
+    <div className="p-4 ml-66">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-3xl font-bold text-gray-500 mb-4">USERS</h2>
         <Link

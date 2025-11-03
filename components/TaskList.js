@@ -23,7 +23,7 @@ export default function TaskList({ ticketId }) {
       setTasks(res.data.tasks || []);
       setTotalPages(res.data.totalPages || 1);
     } catch (error) {
-      console.error("Error fetching tasks:", error);
+      console.error("Error fetching Tasks:", error);
     }
   };
 
@@ -32,12 +32,12 @@ export default function TaskList({ ticketId }) {
   }, [ticketId, currentPage]);
 
   const handleDelete = async (id) => {
-    if (confirm("Are you sure?")) {
+    if (confirm("Are you sure to delete the Task?")) {
       try {
         await deleteTask(id);
         fetchTasks();
       } catch (error) {
-        console.error("Error deleting task:", error);
+        console.error("Error deleting Task:", error);
       }
     }
   };
@@ -119,7 +119,7 @@ export default function TaskList({ ticketId }) {
                   onClick={() => handleEdit(task)}
                   className="bg-blue-600 hover:bg-blue-700 rounded cursor-pointer text-white p-1.5 mr-2"
                 >
-                  <FaRegEdit title="Edit Task" />
+                  <FaRegEdit title="Update Task" />
                 </button>
                 <button
                   onClick={() => handleDelete(task.id)}

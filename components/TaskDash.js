@@ -14,7 +14,7 @@ export default function TaskList({ ticketId }) {
       setTasks(res.data.tasks || []);
       setTotalPages(res.data.totalPages || 1);
     } catch (error) {
-      console.error("Error Fetching Tasks:", error);
+      console.error("Error fetching Tasks:", error);
     }
   };
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function TaskList({ ticketId }) {
     );
 
   return (
-    <div className="mb-8 md:ml-66">
+    <div className="mb-8 ml-66">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-3xl text-gray-500 font-semibold mb-2">
           ALL TASKS LIST:

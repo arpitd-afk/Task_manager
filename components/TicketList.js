@@ -21,19 +21,19 @@ export default function TicketList() {
         setTickets(response.data.tickets || []);
         setTotalPages(response.data.totalPages || 1);
       } catch (error) {
-        console.error("Error fetching tickets:", error);
+        console.error("Error fetching Tickets:", error);
       }
     };
     fetchTickets(currentPage);
   }, [currentPage]);
 
   const handleDelete = async (id) => {
-    if (confirm("Are you sure?")) {
+    if (confirm("Are you sure to delete the Ticket?")) {
       try {
         await deleteTicket(id);
         setTickets(tickets.filter((ticket) => ticket.id !== id));
       } catch (error) {
-        console.log("Error deleting ticket:", error);
+        console.log("Error deleting Ticket:", error);
       }
     }
   };
@@ -46,14 +46,14 @@ export default function TicketList() {
     );
 
   return (
-    <div className="ml-64">
+    <div className="ml-66">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-3xl font-bold mb-4 text-gray-500">TICKETS</h2>
         <Link
           href="/tickets/create"
           className="bg-green-600 hover:bg-green-700 text-white p-2 rounded mb-4 inline-block"
         >
-          <IoIosAddCircle title="Create Ticket" />
+          <IoIosAddCircle title="Add Ticket" />
         </Link>
       </div>
       <table className="w-full border-collapse bg-white shadow-md rounded">
@@ -87,7 +87,7 @@ export default function TicketList() {
                   onClick={() => router.push(`/tickets/edit/${ticket.id}`)}
                   className="text-white text-md bg-blue-500 cursor-pointer p-1.5 rounded hover:bg-blue-600 mr-2"
                 >
-                  <FaRegEdit title="Edit Ticket" />
+                  <FaRegEdit title="Update Ticket" />
                 </button>
                 <button
                   onClick={() => handleDelete(ticket.id)}

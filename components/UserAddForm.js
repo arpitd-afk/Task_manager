@@ -22,12 +22,12 @@ export default function UserAddForm() {
       await signupUser(formData);
       router.push("/users");
     } catch (error) {
-      console.error("Error adding user:", error);
+      console.error("Error adding User:", error);
     }
   };
 
   return (
-    <div className="md:ml-66">
+    <div className="ml-66">
       <button
         onClick={() => router.push("/users")}
         className="justify-start text-gray-700 text-3xl cursor-pointer rounded "
@@ -38,7 +38,7 @@ export default function UserAddForm() {
         onSubmit={handleSubmit}
         className="p-8 w-120 mx-auto bg-gray-100 rounded"
       >
-        <h2 className="text-3xl text-gray-500 font-bold mb-4">CREATE USER</h2>
+        <h2 className="text-3xl text-gray-500 font-bold mb-4">ADD USER</h2>
         <div className="mb-4">
           <label className="block text-md font-medium">Name</label>
           <input

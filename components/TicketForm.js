@@ -24,7 +24,7 @@ export default function TicketForm({ ticketId }) {
             status: res.data.status,
           });
         } catch (error) {
-          console.error("Error fetching ticket:", error);
+          console.error("Error fetching Ticket:", error);
         }
       };
       fetchTicket();
@@ -45,12 +45,12 @@ export default function TicketForm({ ticketId }) {
       }
       router.push("/tickets");
     } catch (error) {
-      console.error("Error saving ticket:", error);
+      console.error("Error saving Ticket:", error);
     }
   };
 
   return (
-    <div className="md:ml-66">
+    <div className="ml-66">
       <button
         onClick={() => router.push("/tickets")}
         className="justify-start text-gray-700 text-3xl cursor-pointer rounded "
@@ -59,10 +59,10 @@ export default function TicketForm({ ticketId }) {
       </button>
       <form
         onSubmit={handleSubmit}
-        className="p-8 w-120 mx-auto bg-gray-100  rounded"
+        className="p-8 w-110 mx-auto bg-gray-100 rounded"
       >
         <h2 className="text-3xl font-bold text-gray-500 mb-4">
-          {ticketId ? "EDIT" : "CREATE"} TICKET
+          {ticketId ? "UPDATE" : "CREATE"} TICKET
         </h2>
         <div className="mb-4">
           <label className="block text-md font-medium">Title</label>
@@ -113,9 +113,9 @@ export default function TicketForm({ ticketId }) {
         </div>
         <button
           type="submit"
-          className="bg-blue-600 w-30 hover:bg-blue-700 cursor-pointer text-white p-2 rounded hover:bg-blue-700"
+          className="bg-blue-600 w-20 hover:bg-blue-700 cursor-pointer text-white p-2 rounded hover:bg-blue-700"
         >
-          Save Ticket
+          Save
         </button>
       </form>
     </div>

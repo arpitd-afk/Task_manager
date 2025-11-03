@@ -9,12 +9,6 @@ export default function UserDetail() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (!id)
-      return (
-        <div className="justify-center items-center text-gray-700 text-2xl">
-          User ID not found
-        </div>
-      );
     const fetchUser = async () => {
       try {
         const res = await getUserByID(id);
@@ -34,14 +28,14 @@ export default function UserDetail() {
     );
 
   return (
-    <div className="py-2">
+    <div className="py-2 ml-66">
       <button
         onClick={() => router.push("/users")}
-        className="justify-start text-gray-700 text-3xl cursor-pointer rounded md:ml-66"
+        className="justify-start text-gray-700 text-3xl cursor-pointer rounded"
       >
         <IoIosArrowRoundBack />
       </button>
-      <div className="flex items-center justify-center md:ml-80 p-4">
+      <div className="flex items-center justify-center p-4">
         <div className="max-w-2xl w-full bg-white p-6 py-10 rounded-lg shadow-lg">
           <h2 className="text-3xl font-bold text-gray-500 mb-6 text-center underline">
             USER DETAILS

@@ -15,7 +15,7 @@ export default function TaskDetail() {
           const res = await getTaskById(id);
           setTask(res.data);
         } catch (error) {
-          console.error("Error fetching task details:", error);
+          console.error("Error fetching Task details:", error);
         }
       };
       fetchTask();
@@ -30,7 +30,7 @@ export default function TaskDetail() {
     );
 
   return (
-    <div className="md:ml-66">
+    <div className="ml-66">
       <button
         onClick={() => router.push("/tickets")}
         className="justify-start text-gray-700 text-3xl cursor-pointer rounded"

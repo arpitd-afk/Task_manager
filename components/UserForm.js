@@ -23,7 +23,7 @@ export default function UserForm({ userId }) {
             role: user.role,
           });
         } catch (error) {
-          console.error("Error fetching user data:", error);
+          console.error("Error fetching User data:", error);
         }
       };
       fetchUser();
@@ -40,12 +40,12 @@ export default function UserForm({ userId }) {
       await updateUser(userId, formData);
       router.push("/users");
     } catch (error) {
-      console.error("Error saving user:", error);
+      console.error("Error saving User:", error);
     }
   };
 
   return (
-    <div className="md:ml-66">
+    <div className="ml-66">
       <button
         onClick={() => router.push("/users")}
         className="justify-start text-gray-700 text-3xl cursor-pointer rounded "

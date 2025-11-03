@@ -30,7 +30,7 @@ export default function CommentSection({ ticketId }) {
       );
       setComments(updatedComments);
     } catch (error) {
-      console.error("Error fetching comments:", error);
+      console.error("Error fetching Comments:", error);
     }
   };
   useEffect(() => {
@@ -39,7 +39,7 @@ export default function CommentSection({ ticketId }) {
 
   const handleSaveComment = async () => {
     try {
-      if (!newComment.trim()) return;
+      if (!newComment) return;
       if (editingCommentId) {
         await updateComment(editingCommentId, { comment_text: newComment });
         setEditingCommentId(null);
@@ -52,23 +52,23 @@ export default function CommentSection({ ticketId }) {
       setNewComment("");
       fetchComments();
     } catch (error) {
-      console.error("Error saving comment:", error);
+      console.error("Error saving Comment:", error);
     }
   };
 
   const handleDeleteComment = async (commentId) => {
-    if (!confirm("Delete this comment?")) return;
+    if (!confirm("Are you sure to delete this Comment?")) return;
     try {
       await deleteComment(commentId);
       fetchComments();
     } catch (error) {
-      console.error("Error deleting comment:", error);
+      console.error("Error deleting Comment:", error);
     }
   };
 
   const handleSaveReply = async (commentId) => {
     try {
-      const replyText = replies[commentId]?.trim();
+      const replyText = replies[commentId];
       if (!replyText) return;
       if (editingReply[commentId]) {
         await updateCommentReply(editingReply[commentId], {
@@ -81,16 +81,17 @@ export default function CommentSection({ ticketId }) {
       setReplies({ ...replies, [commentId]: "" });
       fetchComments();
     } catch (error) {
-      console.error("Error saving reply:", error);
+      console.error("Error saving Reply:", error);
     }
   };
+
   const handleDeleteReply = async (replyId) => {
-    if (!confirm("Delete this reply?")) return;
+    if (!confirm("Delete this Reply?")) return;
     try {
       await deleteCommentReply(replyId);
       fetchComments();
     } catch (error) {
-      console.error("Error deleting reply:", error);
+      console.error("Error deleting Reply:", error);
     }
   };
 
@@ -123,7 +124,7 @@ export default function CommentSection({ ticketId }) {
           <textarea
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            className="h-10 w-98 p-1.5 pl-3 border border-gray-300 rounded"
+            className="h-10 w-92 p-1.5 pl-3 border border-gray-300 rounded"
             placeholder="Add a comment..."
             rows="3"
           />
@@ -131,7 +132,7 @@ export default function CommentSection({ ticketId }) {
             onClick={handleSaveComment}
             className="bg-blue-500 cursor-pointer text-white px-4 py-2 rounded hover:bg-blue-600"
           >
-            {editingCommentId ? "Edit" : "Add"}
+            {editingCommentId ? "Update" : "Post"}
           </button>
           {editingCommentId && (
             <button
@@ -158,7 +159,7 @@ export default function CommentSection({ ticketId }) {
                 onClick={() => startEditingComment(comment)}
                 className="text-blue-500 text-lg  cursor-pointer mr-3"
               >
-                <FaRegEdit title="Edit Comment" />
+                <FaRegEdit title="Update Comment" />
               </button>
               <button
                 onClick={() => handleDeleteComment(comment.id)}
@@ -185,7 +186,7 @@ export default function CommentSection({ ticketId }) {
                       onClick={() => startEditingReply(comment.id, reply)}
                       className="text-blue-500 text-lg  cursor-pointer mr-3"
                     >
-                      <FaRegEdit title="Edit Reply" />
+                      <FaRegEdit title="Update Reply" />
                     </button>
                     <button
                       onClick={() => handleDeleteReply(reply.id)}
@@ -204,7 +205,7 @@ export default function CommentSection({ ticketId }) {
                   setReplies({ ...replies, [comment.id]: e.target.value })
                 }
                 className="w-full p-1.5 h-10 border bg-white border-gray-300 rounded mt-2"
-                placeholder="Add a reply..."
+                placeholder="Add a reply to this Comment..."
                 rows="2"
               />
               <div className="mt-2 flex gap-2">
