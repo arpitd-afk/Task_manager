@@ -6,11 +6,11 @@ export default function TaskList({ ticketId }) {
   const [tasks, setTasks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const ITEMS_PER_PAGE = 7;
+  const ITEMS_PER_PAGE = 10;
 
   const fetchTasks = async () => {
     try {
-      const res = await getAllTasks();
+      const res = await getAllTasks(currentPage, ITEMS_PER_PAGE);
       setTasks(res.data.tasks || []);
       setTotalPages(res.data.totalPages || 1);
     } catch (error) {
@@ -18,7 +18,7 @@ export default function TaskList({ ticketId }) {
     }
   };
   useEffect(() => {
-    fetchTasks(currentPage);
+    fetchTasks();
   }, [ticketId, currentPage]);
 
   if (!tasks)

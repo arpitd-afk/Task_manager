@@ -17,14 +17,14 @@ export default function TicketList() {
   useEffect(() => {
     const fetchTickets = async () => {
       try {
-        const response = await getAllTickets();
+        const response = await getAllTickets(currentPage, ITEMS_PER_PAGE);
         setTickets(response.data.tickets || []);
         setTotalPages(response.data.totalPages || 1);
       } catch (error) {
         console.error("Error fetching Tickets:", error);
       }
     };
-    fetchTickets(currentPage);
+    fetchTickets();
   }, [currentPage]);
 
   const handleDelete = async (id) => {

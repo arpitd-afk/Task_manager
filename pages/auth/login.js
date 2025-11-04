@@ -17,7 +17,9 @@ export default function Login() {
       login(response.data.token, response.data.user);
       router.push("/dashboard");
     } catch (err) {
-      setError(err.response?.data?.statusmessage || "Login Failed");
+      setError(
+        err.response?.data?.statusmessage || "Login Failed please try again"
+      );
     }
   };
 

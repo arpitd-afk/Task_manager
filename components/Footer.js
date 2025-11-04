@@ -26,7 +26,7 @@ export default function Component() {
           </FooterLinkGroup>
         </div>
         <FooterDivider />
-        <FooterCopyright href="#" by="TaskManager™" year={2022} />
+        <FooterCopyright href="#" by="TaskManager" year={2022} />
       </div>
     </Footer>
   );

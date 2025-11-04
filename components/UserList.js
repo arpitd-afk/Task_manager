@@ -17,14 +17,14 @@ export default function UserList() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await getAllUsers();
+        const res = await getAllUsers(currentPage, ITEMS_PER_PAGE);
         setUsers(res.data.data || []);
         setTotalPages(res.data.totalPages || 1);
       } catch (error) {
         console.error("Error fetching Users:", error);
       }
     };
-    fetchUsers(currentPage);
+    fetchUsers();
   }, [currentPage]);
 
   const handleDelete = async (id) => {

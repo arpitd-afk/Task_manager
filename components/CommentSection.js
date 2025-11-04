@@ -18,8 +18,12 @@ export default function CommentSection({ ticketId }) {
   const [replies, setReplies] = useState({});
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editingReply, setEditingReply] = useState({});
+
   const fetchComments = async () => {
     try {
+      if (!ticketId) {
+        console.error("Ticket ID not found");
+      }
       const res = await getCommentByTicket(ticketId);
       const commentsData = res.data.comments || [];
       const updatedComments = await Promise.all(
@@ -57,7 +61,7 @@ export default function CommentSection({ ticketId }) {
   };
 
   const handleDeleteComment = async (commentId) => {
-    if (!confirm("Are you sure to delete this Comment?")) return;
+    if (!confirm("Are you sure to Delete this Comment?")) return;
     try {
       await deleteComment(commentId);
       fetchComments();

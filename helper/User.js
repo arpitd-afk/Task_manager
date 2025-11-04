@@ -1,14 +1,12 @@
 import api from "@/lib/api";
 
-export const getAllUsers = async () => {
-  const response = await api.get("/allusers");
+export const getAllUsers = async (page = 1, limit = 10) => {
+  const response = await api.get(`/allusers?page=${page}&limit=${limit}`);
   return response;
 };
 
 export const getUserByID = async (userId) => {
-  if (!userId) {
-    return console.error("User ID not found");
-  }
+  if (!userId) throw new Error("User ID is required");
   const response = await api.get(`/user/${userId}`);
   return response;
 };
@@ -24,17 +22,14 @@ export const getUserByRole = async () => {
 };
 
 export const updateUser = async (userId, formData) => {
-  if ((!userId, !formData)) {
-    return console.error("Error getting UserID and formdata");
-  }
+  if (!userId || !formData)
+    throw new Error("Error getting userId and formdata");
   const response = await api.put(`/updateuser/${userId}`, formData);
   return response;
 };
 
 export const deleteUser = async (id) => {
-  if (!id) {
-    return console.error("User ID not found");
-  }
+  if (!id) throw new Error("User ID is required");
   const response = await api.delete(`/deleteuser/${id}`);
   return response;
 };

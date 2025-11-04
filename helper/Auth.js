@@ -1,9 +1,7 @@
 import api from "@/lib/api";
 
 export const signupUser = async (data) => {
-  if (!data) {
-    return console.error("Error getting data");
-  }
+  if (!data) throw new Error("Data is required");
   const res = await api.post("/signup", data);
   return res;
 };

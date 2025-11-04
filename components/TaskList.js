@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import TaskForm from "./TaskForm";
-import Pagination from "./Pagination";
 import Modal from "./Modal";
 import { IoIosAddCircle } from "react-icons/io";
 import { FaEye, FaRegEdit } from "react-icons/fa";
@@ -12,24 +11,20 @@ export default function TaskList({ ticketId }) {
   const [tasks, setTasks] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const ITEMS_PER_PAGE = 5;
   const router = useRouter();
 
   const fetchTasks = async () => {
     try {
       const res = await getTasksByTicket(ticketId);
       setTasks(res.data.tasks || []);
-      setTotalPages(res.data.totalPages || 1);
     } catch (error) {
       console.error("Error fetching Tasks:", error);
     }
   };
 
   useEffect(() => {
-    fetchTasks(currentPage);
-  }, [ticketId, currentPage]);
+    fetchTasks();
+  }, [ticketId]);
 
   const handleDelete = async (id) => {
     if (confirm("Are you sure to delete the Task?")) {
@@ -132,11 +127,6 @@ export default function TaskList({ ticketId }) {
           ))}
         </tbody>
       </table>
-      <Pagination
-        totalItems={totalPages * ITEMS_PER_PAGE}
-        itemsPerPage={ITEMS_PER_PAGE}
-        onPageChange={setCurrentPage}
-      />
     </div>
   );
 }

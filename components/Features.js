@@ -12,7 +12,7 @@ const features = [
     icon: CloudArrowUpIcon,
   },
   {
-    name: "SSL certificates.",
+    name: "SSL Certificates.",
     description:
       "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.",
     icon: LockClosedIcon,
