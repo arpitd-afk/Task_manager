@@ -12,7 +12,7 @@ export default function EditUserPage() {
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Header />
-        <main className="p-4">
+        <main className="p-4 py-15">
           <UserForm userId={id} />
         </main>
       </div>

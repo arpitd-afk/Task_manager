@@ -3,86 +3,154 @@ import { useRouter } from "next/router";
 import TaskList from "./TaskList";
 import CommentSection from "./CommentSection";
 import { getTicketByID } from "@/helper/Ticket";
-import { IoIosArrowRoundBack } from "react-icons/io";
+import { ArrowLeft, Clock, AlertCircle, CheckCircle2 } from "lucide-react";
 
 export default function TicketDetail() {
   const router = useRouter();
   const { id } = router.query;
   const [ticket, setTicket] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (id) {
-      const fetchTicket = async () => {
-        try {
-          const res = await getTicketByID(id);
-          setTicket(res.data);
-        } catch (error) {
-          console.error("Error fetching Ticket:", error);
-        }
-      };
-      fetchTicket();
-    }
+    if (!id) return;
+    const fetchTicket = async () => {
+      setLoading(true);
+      try {
+        const res = await getTicketByID(id);
+        setTicket(res.data);
+      } catch (err) {
+        console.error("Failed to load ticket");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTicket();
   }, [id]);
 
-  if (!ticket)
-    return (
-      <div className="flex items-center p-4 ml-64 justify-center h-screen">
-        Loading...
-      </div>
-    );
+  if (loading) {
+    return <SkeletonDetail />;
+  }
+
+  if (!ticket) {
+    return <ErrorState />;
+  }
+
+  const priorityConfig = {
+    High: { color: "text-red-600", bg: "bg-red-50", icon: AlertCircle },
+    Medium: { color: "text-orange-600", bg: "bg-orange-50", icon: AlertCircle },
+    Low: { color: "text-blue-600", bg: "bg-blue-50", icon: CheckCircle2 },
+  };
+
+  const statusConfig = {
+    Open: { color: "text-green-600", bg: "bg-green-50", icon: CheckCircle2 },
+    "In Progress": {
+      color: "text-yellow-600",
+      bg: "bg-yellow-50",
+      icon: Clock,
+    },
+    Closed: { color: "text-gray-600", bg: "bg-gray-50", icon: CheckCircle2 },
+  };
+
+  const priority = priorityConfig[ticket.priority] || priorityConfig.Medium;
+  const status = statusConfig[ticket.status] || statusConfig.Open;
+  const PriorityIcon = priority.icon;
+  const StatusIcon = status.icon;
 
   return (
-    <div className="ml-66">
+    <div className="min-h-screen  py-2 px-2 ml-64">
       <button
         onClick={() => router.push("/tickets")}
-        className="justify-start text-gray-700 text-3xl cursor-pointer rounded"
+        className="flex items-center cursor-pointer gap-2 text-gray-600 hover:text-gray-900 mb-8 group transition"
       >
-        <IoIosArrowRoundBack />
+        <ArrowLeft className="w-6 h-6 group-hover:-translate-x-1 transition" />
+        <span className="font-medium">Back to Tickets</span>
       </button>
-      <h2 className="text-3xl font-bold text-gray-500 mb-4">TICKET DETAILS</h2>
-      <div className="bg-white w-full text-gray-800 text-sm p-6 rounded-lg shadow-md border border-gray-100 mb-6 hover:shadow-lg transition-shadow duration-300">
-        <div className="mb-4 border-b border-gray-200 pb-3">
-          <h2 className="text-lg font-semibold text-gray-900">
-            {ticket.title}
-          </h2>
+
+      <div className="mb-8">
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+              #{ticket.id} · {ticket.title}
+            </h1>
+            <p className="text-gray-500 mt-2">
+              Created on {new Date(ticket.created_at).toLocaleDateString()} at{" "}
+              {new Date(ticket.created_at).toLocaleTimeString()}
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <div
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl ${priority.bg}`}
+            >
+              <PriorityIcon className={`w-4 h-4 ${priority.color}`} />
+              <span className={`text-sm font-semibold ${priority.color}`}>
+                {ticket.priority}
+              </span>
+            </div>
+            <div
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl ${status.bg}`}
+            >
+              <StatusIcon className={`w-4 h-4 ${status.color}`} />
+              <span className={`text-sm font-semibold ${status.color}`}>
+                {ticket.status}
+              </span>
+            </div>
+          </div>
         </div>
-        <div className="space-y-3">
-          <p className="flex items-start">
-            <span className="font-medium text-gray-600 w-28">Description:</span>
-            <span className="text-gray-800 flex-1">{ticket.description}</span>
-          </p>
-          <p className="flex items-center">
-            <span className="font-medium text-gray-600 w-28">Priority:</span>
-            <span
-              className={`px-2 py-1 text-xs font-semibold rounded ${
-                ticket.priority === "High"
-                  ? "bg-red-100 text-red-700"
-                  : ticket.priority === "Medium"
-                  ? "bg-yellow-100 text-yellow-700"
-                  : "bg-green-100 text-green-700"
-              }`}
-            >
-              {ticket.priority}
-            </span>
-          </p>
-          <p className="flex items-center">
-            <span className="font-medium text-gray-600 w-28">Status:</span>
-            <span
-              className={`px-2 py-1 text-xs font-semibold rounded ${
-                ticket.status === "Open"
-                  ? "bg-green-100 text-green-700"
-                  : ticket.status === "In Progress"
-                  ? "bg-yellow-100 text-yellow-700"
-                  : "bg-blue-100 text-blue-700"
-              }`}
-            >
-              {ticket.status}
-            </span>
+      </div>
+
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 mb-8">
+        <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+          Description
+        </h2>
+        <div className="prose prose-sm max-w-none">
+          <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+            {ticket.description || "No description provided."}
           </p>
         </div>
       </div>
-      <TaskList ticketId={id} />
-      <CommentSection ticketId={id} />
+
+      {/* Tasks section*/}
+      <div className="mb-8">
+        <TaskList ticketId={id} />
+      </div>
+
+      {/* Comments section */}
+      <div>
+        <CommentSection ticketId={id} />
+      </div>
     </div>
   );
 }
+
+// show Skeleton when data is loading
+const SkeletonDetail = () => (
+  <div className="min-h-screen py-2 px-2 ml-64">
+    <div className="animate-pulse">
+      <div className="h-10 bg-gray-200 rounded w-48 mb-8"></div>
+      <div className="h-12 bg-gray-200 rounded mb-6"></div>
+      <div className="bg-white rounded-2xl p-8 mb-8">
+        <div className="h-6 bg-gray-200 rounded mb-4 w-32"></div>
+        <div className="space-y-3">
+          <div className="h-4 bg-gray-200 rounded"></div>
+          <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+          <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+//show Error when no data is found
+const ErrorState = () => (
+  <div className="min-h-screen bg-gray-50 flex items-center justify-center ml-64">
+    <div className="text-center">
+      <p className="text-red-600 font-semibold text-lg">Ticket not found</p>
+      <button
+        onClick={() => window.location.reload()}
+        className="mt-4 px-6 py-3 bg-gray-800 text-white rounded-xl hover:bg-gray-700 transition"
+      >
+        Retry
+      </button>
+    </div>
+  </div>
+);

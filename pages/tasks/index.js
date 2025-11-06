@@ -8,7 +8,7 @@ export default function TasksPage() {
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Header />
-        <main className="p-2">
+        <main className="p-4 py-15">
           <TaskDash />
         </main>
       </div>

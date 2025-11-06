@@ -1,7 +1,7 @@
 import api from "@/lib/api";
 
-export const getAllTasks = async (page = 1, limit = 10) => {
-  const response = await api.get(`/getalltasks?page=${page}&limit=${limit}`);
+export const getAllTasks = async () => {
+  const response = await api.get(`/getalltasks`);
   return response;
 };
 

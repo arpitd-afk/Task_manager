@@ -1,7 +1,7 @@
 import api from "@/lib/api";
 
-export const getAllUsers = async (page = 1, limit = 10) => {
-  const response = await api.get(`/allusers?page=${page}&limit=${limit}`);
+export const getAllUsers = async () => {
+  const response = await api.get(`/allusers`);
   return response;
 };
 

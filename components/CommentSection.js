@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { FaRegEdit } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdReply } from "react-icons/md";
 import {
   addcomment,
   addcommentReply,
@@ -12,224 +12,341 @@ import {
   updateCommentReply,
 } from "@/helper/Comment";
 
-export default function CommentSection({ ticketId }) {
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState("");
-  const [replies, setReplies] = useState({});
-  const [editingCommentId, setEditingCommentId] = useState(null);
-  const [editingReply, setEditingReply] = useState({});
+const CommentInput = ({
+  value,
+  onChange,
+  onSave,
+  onCancel,
+  isEditing,
+  placeholder,
+  buttonText = "Post",
+}) => (
+  <div className="flex gap-2 mt-1">
+    <textarea
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="w-full h-11 p-2 bg-white border border-gray-300 rounded-lg"
+      placeholder={placeholder}
+      rows={1}
+    />
+    <div className="flex gap-2">
+      <button
+        onClick={onSave}
+        disabled={!value.trim()}
+        className="px-3 py-1 cursor-pointer bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition"
+      >
+        {isEditing ? "Update" : buttonText}
+      </button>
+      {isEditing && (
+        <button
+          onClick={onCancel}
+          className="px-3 py-1 cursor-pointer bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
+        >
+          Cancel
+        </button>
+      )}
+    </div>
+  </div>
+);
 
-  const fetchComments = async () => {
-    try {
-      if (!ticketId) {
-        console.error("Ticket ID not found");
-      }
-      const res = await getCommentByTicket(ticketId);
-      const commentsData = res.data.comments || [];
-      const updatedComments = await Promise.all(
-        commentsData.map(async (comment) => {
-          const repliesRes = await getCommentReply(comment.id);
-          return { ...comment, replies: repliesRes.data.replies || [] };
-        })
-      );
-      setComments(updatedComments);
-    } catch (error) {
-      console.error("Error fetching Comments:", error);
-    }
+const ActionBtn = ({ icon, onClick, color }) => {
+  const colors = {
+    blue: "hover:bg-blue-50 text-blue-600",
+    red: "hover:bg-red-50 text-red-600",
   };
-  useEffect(() => {
-    fetchComments();
-  }, [ticketId]);
+  return (
+    <button
+      onClick={onClick}
+      className={`p-2.5 rounded-lg cursor-pointer transition ${colors[color]} hover:scale-110`}
+    >
+      {icon}
+    </button>
+  );
+};
 
-  const handleSaveComment = async () => {
-    try {
-      if (!newComment) return;
-      if (editingCommentId) {
-        await updateComment(editingCommentId, { comment_text: newComment });
-        setEditingCommentId(null);
-      } else {
-        await addcomment({
-          ticket_id: ticketId,
-          comment_text: newComment,
-        });
-      }
-      setNewComment("");
-      fetchComments();
-    } catch (error) {
-      console.error("Error saving Comment:", error);
-    }
-  };
+// Reply Component
+const Reply = ({ reply, onEdit, onDelete }) => {
+  return (
+    <div className="bg-white border border-gray-200 p-1.5 rounded-lg shadow-sm">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm text-gray-800">{reply.reply_text}</p>
+          <p className="text-xs text-gray-500">
+            {reply.user_name} ({reply.role}) •{" "}
+            {new Date(reply.created_at).toLocaleString()}
+          </p>
+        </div>
+        <div className="flex gap-1 opacity-30 hover:opacity-100 transition">
+          <ActionBtn
+            icon={<FaRegEdit />}
+            onClick={() => onEdit(reply)}
+            color="blue"
+          />
+          <ActionBtn
+            icon={<MdDelete />}
+            onClick={() => onDelete(reply.id)}
+            color="red"
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
 
-  const handleDeleteComment = async (commentId) => {
-    if (!confirm("Are you sure to Delete this Comment?")) return;
-    try {
-      await deleteComment(commentId);
-      fetchComments();
-    } catch (error) {
-      console.error("Error deleting Comment:", error);
-    }
-  };
-
-  const handleSaveReply = async (commentId) => {
-    try {
-      const replyText = replies[commentId];
-      if (!replyText) return;
-      if (editingReply[commentId]) {
-        await updateCommentReply(editingReply[commentId], {
-          reply_text: replyText,
-        });
-        setEditingReply({ ...editingReply, [commentId]: null });
-      } else {
-        await addcommentReply(commentId, { reply_text: replyText });
-      }
-      setReplies({ ...replies, [commentId]: "" });
-      fetchComments();
-    } catch (error) {
-      console.error("Error saving Reply:", error);
-    }
-  };
-
-  const handleDeleteReply = async (replyId) => {
-    if (!confirm("Delete this Reply?")) return;
-    try {
-      await deleteCommentReply(replyId);
-      fetchComments();
-    } catch (error) {
-      console.error("Error deleting Reply:", error);
-    }
-  };
-
-  const startEditingComment = (comment) => {
-    setNewComment(comment.comment_text);
-    setEditingCommentId(comment.id);
-  };
-
-  const startEditingReply = (commentId, reply) => {
-    setReplies({ ...replies, [commentId]: reply.reply_text });
-    setEditingReply({ ...editingReply, [commentId]: reply.id });
-  };
-
-  const cancelEditingComment = () => {
-    setNewComment("");
-    setEditingCommentId(null);
-  };
-
-  const cancelEditingReply = (commentId) => {
-    setReplies({ ...replies, [commentId]: "" });
-    setEditingReply({ ...editingReply, [commentId]: null });
-  };
+const Comment = ({
+  comment,
+  onEdit,
+  onDelete,
+  onReplySave,
+  onReplyEdit,
+  onReplyDelete,
+  replyDraft,
+  setReplyDraft,
+  editingReplyId,
+}) => {
+  const [showReply, setShowReply] = useState(false);
 
   return (
-    <div className="p-4">
-      <h3 className="text-3xl text-gray-500 font-bold mb-3">COMMENTS:</h3>
-      {/* Comment input section*/}
-      <div className="mb-4">
-        <div className="flex gap-2">
-          <textarea
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            className="h-10 w-92 p-1.5 pl-3 border border-gray-300 rounded"
-            placeholder="Add a comment..."
-            rows="3"
+    <div className="bg-gray-50 border border-gray-200 p-5 rounded-xl shadow-sm">
+      <div className="flex justify-between items-start">
+        <div className="flex-1">
+          <p className="text-gray-800 font-medium">{comment.comment_text}</p>
+          <p className="text-xs text-gray-500">
+            {comment.user_name} ({comment.role}) •{" "}
+            {new Date(comment.created_at).toLocaleString()}
+          </p>
+        </div>
+
+        <div className="flex gap-2 opacity-30 hover:opacity-100 transition">
+          <ActionBtn
+            icon={<FaRegEdit />}
+            onClick={() => onEdit(comment)}
+            color="blue"
           />
-          <button
-            onClick={handleSaveComment}
-            className="bg-blue-500 cursor-pointer text-white px-4 py-2 rounded hover:bg-blue-600"
-          >
-            {editingCommentId ? "Update" : "Post"}
-          </button>
-          {editingCommentId && (
-            <button
-              onClick={cancelEditingComment}
-              className="bg-gray-500 cursor-pointer text-white px-4 py-2 rounded hover:bg-gray-600"
-            >
-              Cancel
-            </button>
-          )}
+          <ActionBtn
+            icon={<MdDelete />}
+            onClick={() => onDelete(comment.id)}
+            color="red"
+          />
         </div>
       </div>
 
-      {/* Comment list section*/}
-      <div className="space-y-4">
-        {comments.map((comment) => (
-          <div key={comment.id} className="bg-gray-100 w-138 p-4 rounded">
-            <p className="text-sm">{comment.comment_text}</p>
-            <p className="text-xs text-gray-600">
-              By {comment.user_name} ({comment.role}) at{" "}
-              {new Date(comment.created_at).toLocaleString()}
-            </p>
-            <div className="mt-2">
-              <button
-                onClick={() => startEditingComment(comment)}
-                className="text-blue-500 text-lg  cursor-pointer mr-3"
-              >
-                <FaRegEdit title="Update Comment" />
-              </button>
-              <button
-                onClick={() => handleDeleteComment(comment.id)}
-                className="text-red-500 text-xl cursor-pointer"
-              >
-                <MdDelete title="Delete Comment" />
-              </button>
-            </div>
+      {/* Replies */}
+      <div className="mt-4 space-y-3 pl-6 border-l-2 border-gray-300">
+        <h2 className="text-sm font-semibold mb-1">Replies:</h2>
+        {comment.replies?.map((reply) => (
+          <Reply
+            key={reply.id}
+            reply={reply}
+            commentId={comment.id}
+            onEdit={(r) => onReplyEdit(comment.id, r)}
+            onDelete={onReplyDelete}
+          />
+        ))}
 
-            {/* Replies section */}
-            <div className="ml-4 mt-3 space-y-2 w-120">
-              {comment.replies.map((reply) => (
-                <div
-                  key={reply.id}
-                  className="bg-white border border-gray-300 p-2 rounded"
-                >
-                  <p className="text-sm">{reply.reply_text}</p>
-                  <p className="text-xs text-gray-600">
-                    By {reply.user_name} ({reply.role}) at{" "}
-                    {new Date(reply.created_at).toLocaleString()}
-                  </p>
-                  <div className="mt-1">
-                    <button
-                      onClick={() => startEditingReply(comment.id, reply)}
-                      className="text-blue-500 text-lg  cursor-pointer mr-3"
-                    >
-                      <FaRegEdit title="Update Reply" />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteReply(reply.id)}
-                      className="text-red-500 text-xl cursor-pointer"
-                    >
-                      <MdDelete title="Delete Reply" />
-                    </button>
-                  </div>
-                </div>
-              ))}
+        {/* Reply Input */}
+        {showReply && (
+          <CommentInput
+            value={replyDraft}
+            onChange={setReplyDraft}
+            onSave={() => onReplySave(comment.id)}
+            onCancel={() => {
+              setShowReply(false);
+              setReplyDraft("");
+            }}
+            isEditing={editingReplyId === comment.id}
+            placeholder="Write a reply..."
+            buttonText="Reply"
+          />
+        )}
 
-              {/* Reply input section */}
-              <textarea
-                value={replies[comment.id] || ""}
-                onChange={(e) =>
-                  setReplies({ ...replies, [comment.id]: e.target.value })
-                }
-                className="w-full p-1.5 h-10 border bg-white border-gray-300 rounded mt-2"
-                placeholder="Add a reply to this Comment..."
-                rows="2"
-              />
-              <div className="mt-2 flex gap-2">
-                <button
-                  onClick={() => handleSaveReply(comment.id)}
-                  className="bg-green-500 text-white px-4 py-1 rounded cursor-pointer hover:bg-green-600"
-                >
-                  {editingReply[comment.id] ? "Edit Reply" : "Reply"}
-                </button>
-                {editingReply[comment.id] && (
-                  <button
-                    onClick={() => cancelEditingReply(comment.id)}
-                    className="bg-gray-500 text-white px-4 py-1 rounded cursor-pointer hover:bg-gray-600"
-                  >
-                    Cancel
-                  </button>
-                )}
-              </div>
-            </div>
+        {/* Show Reply */}
+        <button
+          onClick={() => setShowReply(!showReply)}
+          className="text-sm cursor-pointer text-blue-600 hover:text-blue-800 flex items-center gap-1 mt-2"
+        >
+          <MdReply className="text-lg" />
+          {showReply ? "Hide" : "Reply"}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default function CommentSection({ ticketId }) {
+  const [comments, setComments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const [editingComment, setEditingComment] = useState(null);
+  const [newCommentText, setNewCommentText] = useState("");
+
+  const [replyDrafts, setReplyDrafts] = useState({});
+  const [editingReply, setEditingReply] = useState({});
+
+  const fetchComments = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await getCommentByTicket(ticketId);
+      const commentsData = res.data.comments || [];
+
+      const commentsWithReplies = await Promise.all(
+        commentsData.map(async (comment) => {
+          const replyRes = await getCommentReply(comment.id);
+          return { ...comment, replies: replyRes.data.replies || [] };
+        })
+      );
+
+      setComments(commentsWithReplies);
+    } catch (err) {
+      setError("Failed to load comments.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [ticketId]);
+
+  useEffect(() => {
+    if (ticketId) fetchComments();
+  }, [ticketId, fetchComments]);
+
+  const saveComment = async () => {
+    if (!newCommentText.trim()) return;
+
+    try {
+      if (editingComment) {
+        await updateComment(editingComment.id, {
+          comment_text: newCommentText,
+        });
+        setEditingComment(null);
+      } else {
+        await addcomment({ ticket_id: ticketId, comment_text: newCommentText });
+      }
+      setNewCommentText("");
+      fetchComments();
+    } catch (err) {
+      alert("Failed to save comment.");
+    }
+  };
+
+  const deleteCommentHandler = async (commentId) => {
+    if (!window.confirm("Delete this comment?")) return;
+    try {
+      await deleteComment(commentId);
+      fetchComments();
+    } catch (err) {
+      alert("Failed to delete comment.");
+    }
+  };
+
+  const saveReply = async (commentId) => {
+    const text = replyDrafts[commentId];
+    if (!text) return;
+
+    try {
+      if (editingReply[commentId]) {
+        await updateCommentReply(editingReply[commentId], { reply_text: text });
+        setEditingReply((prev) => ({ ...prev, [commentId]: null }));
+      } else {
+        await addcommentReply(commentId, { reply_text: text });
+      }
+      setReplyDrafts((prev) => ({ ...prev, [commentId]: "" }));
+      fetchComments();
+    } catch (err) {
+      alert("Failed to save reply.");
+    }
+  };
+
+  const startReplyEdit = (commentId, reply) => {
+    setReplyDrafts((prev) => ({ ...prev, [commentId]: reply.reply_text }));
+    setEditingReply((prev) => ({ ...prev, [commentId]: reply.id }));
+  };
+
+  const deleteReplyHandler = async (replyId) => {
+    if (!window.confirm("Delete this reply?")) return;
+    try {
+      await deleteCommentReply(replyId);
+      fetchComments();
+    } catch (err) {
+      alert("Failed to delete reply.");
+    }
+  };
+
+  const startEditComment = (comment) => {
+    setEditingComment({ id: comment.id });
+    setNewCommentText(comment.comment_text);
+  };
+
+  const cancelEditComment = () => {
+    setEditingComment(null);
+    setNewCommentText("");
+  };
+
+  const handleReplyChange = useCallback((commentId, value) => {
+    setReplyDrafts((prev) => ({ ...prev, [commentId]: value }));
+  }, []);
+
+  // show when data is loading
+  const SkeletonTasks = () => (
+    <div className="space-y-4">
+      {[1, 2, 3].map((i) => (
+        <div key={i} className="bg-gray-50 rounded-xl p-5 animate-pulse">
+          <div className="h-5 bg-gray-200 rounded w-full"></div>
+          <div className="h-4 bg-gray-200 rounded w-3/4 mt-2"></div>
+          <div className="h-4 bg-gray-200 rounded w-full mt-2 ml-8"></div>
+          <div className="justify-end flex gap-4 mt-3">
+            <div className="h-6 bg-gray-200 rounded-full w-18"></div>
+            <div className="h-6 bg-gray-200 rounded-full w-18"></div>
           </div>
+          <div className="h-6 ml-8 bg-gray-200 rounded-full w-18"></div>
+        </div>
+      ))}
+    </div>
+  );
+
+  return (
+    <div className="p-3 max-w-2xl rounded-xl shadow-md border border-gray-200">
+      <h3 className="text-xl font-bold text-gray-800 mb-2">COMMENTS:</h3>
+
+      {/* Comment Input */}
+      <div className="bg-white mb-4">
+        <CommentInput
+          value={newCommentText}
+          onChange={setNewCommentText}
+          onSave={saveComment}
+          onCancel={cancelEditComment}
+          isEditing={!!editingComment}
+          placeholder="Share your thoughts..."
+          buttonText={editingComment ? "Update Comment" : "Post"}
+        />
+      </div>
+
+      {loading && <SkeletonTasks />}
+      {error && <p className="text-center text-red-500">{error}</p>}
+
+      {/* Comments List */}
+      <div className="space-y-6">
+        {comments.length === 0 && !loading && (
+          <p className="text-center text-gray-500">
+            No comments yet. Be the first!
+          </p>
+        )}
+
+        {comments.map((comment) => (
+          <Comment
+            key={comment.id}
+            comment={comment}
+            onEdit={startEditComment}
+            onDelete={deleteCommentHandler}
+            onReplySave={saveReply}
+            onReplyEdit={startReplyEdit}
+            onReplyDelete={deleteReplyHandler}
+            replyDraft={replyDrafts[comment.id] || ""}
+            setReplyDraft={(value) => handleReplyChange(comment.id, value)}
+            isReplying={!!replyDrafts[comment.id]}
+            editingReplyId={editingReply[comment.id]}
+          />
         ))}
       </div>
     </div>

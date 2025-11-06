@@ -12,7 +12,7 @@ export default function EditTicketPage() {
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Header />
-        <main className="p-4">
+        <main className="p-4 py-15">
           <TicketForm ticketId={id} />
         </main>
       </div>

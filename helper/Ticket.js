@@ -1,7 +1,7 @@
 import api from "@/lib/api";
 
-export const getAllTickets = async (page = 1, limit = 10) => {
-  const response = await api.get(`/getalltickets?page=${page}&limit=${limit}`);
+export const getAllTickets = async () => {
+  const response = await api.get(`/getalltickets`);
   return response;
 };
 
